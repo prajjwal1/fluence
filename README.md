@@ -1,11 +1,9 @@
-# Title
-> summary
+# Fluence
+> Fluence is a deep learning library based on Pytorch for attention based approaches.
 
 
-## Fluence
-Fluence is a deep learning library based on Pytorch for attention based approaches.
+## Installing
 
-## Install
 `pip install fluence`
 
 The library contains implementation for the following approaches (many more to come):
