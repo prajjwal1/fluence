@@ -7,7 +7,6 @@ index = {"AdaptiveSpan": "adaptive_span.ipynb",
          "EntmaxAlpha": "entmax.ipynb",
          "EntmaxBisectFunction": "entmax.ipynb",
          "entmax_bisect": "entmax.ipynb",
-         "home": "entmax.ipynb",
          "LayerDrop": "layerdrop.ipynb"}
 
 modules = ["adaptive/adaptive_span.py",

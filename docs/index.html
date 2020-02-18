@@ -25,7 +25,7 @@ summary: "summary"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Fluence">Fluence<a class="anchor-link" href="#Fluence">&#182;</a></h2><p>Fluence is a deep learning library based on Pytorch for adaptive computation approaches.</p>
+<h2 id="Fluence">Fluence<a class="anchor-link" href="#Fluence">&#182;</a></h2><p>Fluence is a deep learning library based on Pytorch for attention based approaches.</p>
 
 </div>
 </div>
@@ -51,13 +51,15 @@ summary: "summary"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-use">How to use<a class="anchor-link" href="#How-to-use">&#182;</a></h2><h3 id="Using-Adaptive-Attention-Spans-in-a-transformer">Using Adaptive Attention Spans in a transformer<a class="anchor-link" href="#Using-Adaptive-Attention-Spans-in-a-transformer">&#182;</a></h3>
+<h2 id="Documentation">Documentation<a class="anchor-link" href="#Documentation">&#182;</a></h2><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-
+<h2 id="Usage">Usage<a class="anchor-link" href="#Usage">&#182;</a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
+<h4 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span">&#182;</a></h4>
 <pre><code>import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
 config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
@@ -79,26 +81,43 @@ adaptive_span(attention_scores_1).shape</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Define the following in <strong>init</strong> of BertAttention</p>
-<ol>
-<li>Set it as an attribute
-<pre><code> if self.adapt_span_bool:
-     self.adaptive_span = AdaptiveSpan(**config)</code></pre>
-</li>
-<li>Use the adapt_span_loss with the current loss function
-<pre><code>adapt_span_loss = 0.
-for l in self.model.layer: # Should be a nn.ModuleList to iterate
-     adapt_span_loss += l.attention.adaptive_span.get_loss() #attention is the BertAttention class</code></pre>
-</li>
-<li>Perform clamping
-<pre><code>for l in self.model.layer:
-     l.attention.self.adaptive_span.clamp_param()</code></pre>
-</li>
-<li>Get attention span
-<pre><code>for layer_idx, i in enumerate(self.model.layer):
-     l = i.attention.adaptive_span.get_current_avg_span()</code></pre>
-</li>
-</ol>
+<h4 id="Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">Using Entmax as a replacement for softmax with learnable alpha values<a class="anchor-link" href="#Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>from fluence.adaptive.entmax import *
+num_attention_heads = 12
+entmax_alpha = EntmaxAlpha(num_attention_heads)
+attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36))</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Using-Layerdrop">Using Layerdrop<a class="anchor-link" href="#Using-Layerdrop">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>from fluence.adaptive.layerdrop import LayerDrop
+from torch import nn
+net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
+layers_to_drop = 2
+layerdrop = LayerDrop(net, layers_to_drop)
+output = layerdrop(torch.rand(10,2))</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Author: Prajjwal Bhargava (<a href="https://twitter.com/prajjwal_1">@prajjwal_1</a>)</p>
 
 </div>
 </div>

@@ -23,7 +23,6 @@ class LayerDrop(nn.Module):
 
     def forward(self, feats, mask=None):
         x = torch.randint(0, self.length, (self.layers_to_drop,))
-        print(x)
         for index, layer in enumerate(self.module_list):
             if index not in x:
                 if not mask:

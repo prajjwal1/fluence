@@ -3,7 +3,7 @@
 
 
 ## Fluence
-Fluence is a deep learning library based on Pytorch for adaptive computation approaches.
+Fluence is a deep learning library based on Pytorch for attention based approaches.
 
 ## Install
 `pip install fluence`
@@ -13,10 +13,14 @@ The library contains implementation for the following approaches (many more to c
 - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
 - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 
-## How to use
+## Documentation 
+Please head to this [link](prajjwal1.github.io/fluence) to learn how you can integrate fluence with your workflow
 
-### Using Adaptive Attention Spans in a transformer
+## Usage
+Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples
 
+
+#### Using Adaptive Attention Span
 ```
 import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
@@ -35,25 +39,24 @@ adaptive_span(attention_scores_0).shape # Soft masking function is multiplied
 adaptive_span(attention_scores_1).shape
 ```
 
-Define the following in __init__ of BertAttention
-1. Set it as an attribute
-    ```
-    if self.adapt_span_bool:
-        self.adaptive_span = AdaptiveSpan(**config)
-    ```
-2. Use the adapt_span_loss with the current loss function
+#### Using Entmax as a replacement for softmax with learnable alpha values
+
 ```
-adapt_span_loss = 0.
-for l in self.model.layer: # Should be a nn.ModuleList to iterate
-        adapt_span_loss += l.attention.adaptive_span.get_loss() #attention is the BertAttention class
+from fluence.adaptive.entmax import *
+num_attention_heads = 12
+entmax_alpha = EntmaxAlpha(num_attention_heads)
+attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36)) 
 ```
-3. Perform clamping
+
+#### Using Layerdrop
+
 ```
-for l in self.model.layer:
-        l.attention.self.adaptive_span.clamp_param()
+from fluence.adaptive.layerdrop import LayerDrop
+from torch import nn
+net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
+layers_to_drop = 2
+layerdrop = LayerDrop(net, layers_to_drop)
+output = layerdrop(torch.rand(10,2))
 ```
-4. Get attention span
-```
-for layer_idx, i in enumerate(self.model.layer):
-        l = i.attention.adaptive_span.get_current_avg_span()
-```
+
+Author: Prajjwal Bhargava ([@prajjwal_1](https://twitter.com/prajjwal_1))
