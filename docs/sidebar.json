@@ -1,6 +1,8 @@
 {
   "fluence": {
     "Overview": "/",
-    "Title": "/layerdrop"
+    "fluence.adaptive.adaptive_span": "/adaptive_span",
+    "fluence.adaptive.entmax": "/entmax",
+    "fluence.adaptive.layerdrop": "/layerdrop"
   }
 }

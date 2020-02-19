@@ -11,7 +11,7 @@ import torch.nn.functional as F
 # Cell
 class AdaptiveSpan(nn.Module):
     """
-    Implements Adaptive Attention Span in Transformers (https://arxiv.org/abs/1905.07799)
+    Implements `Adaptive Attention Span in Transformers` (https://arxiv.org/abs/1905.07799)
 
     Arguments:
         attn_span (int): specifies the maximum attention span

@@ -1,11 +1,11 @@
 ---
 
-title: Title
+title: fluence.adaptive.adaptive_span
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "summary"
+summary: "Implements Adaptive Attention Span"
 ---
 <!--
 
@@ -40,7 +40,7 @@ summary: "summary"
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="AdaptiveSpan" class="doc_header"><code>class</code> <code>AdaptiveSpan</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/adaptive_span.py#L12" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AdaptiveSpan</code>(<strong><code>attn_span</code></strong>, <strong><code>adapt_span_loss_coeff</code></strong>, <strong><code>adapt_span_ramp</code></strong>, <strong><code>adapt_span_init</code></strong>, <strong><code>adapt_span_cache</code></strong>, <strong><code>nb_heads</code></strong>, <strong><code>bs</code></strong>, <strong><code>mask_size</code></strong>) :: <code>Module</code></p>
 </blockquote>
-<p>Implements Adaptive Attention Span in Transformers (<a href="https://arxiv.org/abs/1905.07799">https://arxiv.org/abs/1905.07799</a>)</p>
+<p>Implements <code>Adaptive Attention Span in Transformers</code> (<a href="https://arxiv.org/abs/1905.07799">https://arxiv.org/abs/1905.07799</a>)</p>
 <p>Arguments:
     attn_span (int): specifies the maximum attention span
     adapt_span_loss_coeff (float): regulates the initial value of adapt_span_loss

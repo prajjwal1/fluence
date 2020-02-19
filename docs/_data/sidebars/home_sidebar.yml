@@ -10,7 +10,13 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: fluence.adaptive.adaptive_span
+      url: /adaptive_span
+    - output: web,pdf
+      title: fluence.adaptive.entmax
+      url: /entmax
+    - output: web,pdf
+      title: fluence.adaptive.layerdrop
       url: /layerdrop
     output: web
     title: fluence
