@@ -1,13 +1,13 @@
-repository: fastai/nbdev
+repository: prajjwal1/fluence
 output: web
-topnav_title: nbdev
-site_title: nbdev
-company_name: fast.ai
-description: Writing a library entirely in notebooks
-google_search: 000837339549978028235:vh0pq0omtgr
+topnav_title: fluence
+site_title: fluence
+company_name: 
+description: Deep Learning library for attention based mechanisms
+google_search: 
 use_math: true
 google_analytics:
-twitter_username: fastdotai
+twitter_username: prajjwal_1
 
 host: 127.0.0.1
 # the preview server used. Leave as is.
