@@ -6,27 +6,29 @@ __all__ = ['AdaptiveSpan']
 import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 # Cell
+
+
 class AdaptiveSpan(nn.Module):
     """
-    Implements `Adaptive Attention Span in Transformers` (https://arxiv.org/abs/1905.07799)
+    Implements `Adaptive Attention Span in Transformers` [Paper](https://arxiv.org/abs/1905.07799)
 
     Arguments:
         attn_span (int): specifies the maximum attention span
         adapt_span_loss_coeff (float): regulates the initial value of adapt_span_loss
         adapt_span_ramp (int): offset value
-        adapt_span_init (float): initial additive value for the main parameter
+        adapt_span_init (float): initial additive value for the
+                                 main parameter
         adapt_span_cache (bool): determines working of caching
         nb_heads (int): number of attention heads
         bs (int): batch size
         mask_size (list): a list containing last dimension of possible attention scores
 
     Example::
-        >>> config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
-                      'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,'bs': 128,
-                      'mask_size': [20,36]}
+        >>> config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005,
+                      'adapt_span_ramp': 32, 'adapt_span_init': 0.002, 'adapt_span_cache': True,
+                      'nb_heads': 12,'bs': 128, 'mask_size': [20,36]}
         >>> adaptive_span = AdaptiveSpan(**config)
         >>> adaptive_span(torch.randn(128,12,26,36)).shape
         >>> adaptive_span(torch.randn(128,12,26,20)).shape
@@ -38,7 +40,7 @@ class AdaptiveSpan(nn.Module):
     def __init__(self, attn_span, adapt_span_loss_coeff, adapt_span_ramp, adapt_span_init,
                  adapt_span_cache, nb_heads, bs, mask_size):
 
-        super(AdaptiveSpan,self).__init__()
+        super(AdaptiveSpan, self).__init__()
         self.attn_span = attn_span    # [attn_span]
         self.ramp_size = adapt_span_ramp
         self.bs = bs
@@ -46,9 +48,9 @@ class AdaptiveSpan(nn.Module):
         self.init_val = adapt_span_init
         self.adapt_cache = adapt_span_cache
         self.loss_coeff = adapt_span_loss_coeff
-        self.shape = (self.bs, self.nb_heads,1, 1)
+        self.shape = (self.bs, self.nb_heads, 1, 1)
 
-        self.current_val = nn.Parameter(torch.nn.init.kaiming_normal_(torch.empty(*self.shape)) + self.init_val) # [bs,nb_heads,1,1]
+        self.current_val = nn.Parameter(torch.nn.init.kaiming_normal_(torch.empty(*self.shape)) + self.init_val)  # [bs,nb_heads,1,1]
         self.mask_size = mask_size
 
         mask_template_0 = torch.linspace(1 - self.mask_size[0], 0, steps=self.mask_size[0]) # [attn_span]
@@ -128,5 +130,5 @@ class AdaptiveSpan(nn.Module):
 
     def forward(self,attn):
         attn = self.mask_forward(attn)
-        attn = attn/(attn.sum(-1,keepdim=True)+1e-8)
+        attn = attn/(attn.sum(-1, keepdim=True)+ 1e-8)
         return attn

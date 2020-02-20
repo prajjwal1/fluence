@@ -3,6 +3,10 @@
     "Overview": "/",
     "fluence.adaptive.adaptive_span": "/adaptive_span",
     "fluence.adaptive.entmax": "/entmax",
-    "fluence.adaptive.layerdrop": "/layerdrop"
+    "fluence.adaptive.layerdrop": "/layerdrop",
+    "fluence.models.lxmert.file_utils": "/lxmert.file_utils",
+    "LXMERT": "/lxmert",
+    "lxmert_utils": "/lxmert_utils",
+    "Tests/Model": "/model_tests"
   }
 }

@@ -50,6 +50,17 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure">&#182;</a></h2>
+<pre><code>fluence
+    - adaptive     # Implements Adaptive Modules
+    - models       # Models
+    - tests        # Unit tests</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Documentation">Documentation<a class="anchor-link" href="#Documentation">&#182;</a></h2><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow</p>
 
 </div>
@@ -110,6 +121,56 @@ net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
 layers_to_drop = 2
 layerdrop = LayerDrop(net, layers_to_drop)
 output = layerdrop(torch.rand(10,2))</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="fluence.models">fluence.models<a class="anchor-link" href="#fluence.models">&#182;</a></h3><p>Contains:</p>
+
+<pre><code>- LXMERT (Cross modal (vision and language) transformer) with adaptive capabilities as `fluence.adaptive`</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code># Define a params file which contains configurations
+
+params = {'adapt_span_enabled': False, 'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 
+          'adapt_span_ramp': 32, 'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,
+          'bs': 128, 'mask_size': [20,36], 'sparse_enabled': True, 'num_attention_heads': 4, 
+          'layer_sizes': {'lang':9,'cross':5,'vision':5}, 'from_scratch': False, 
+          'layerdrop_enabled': False, 'layerdrop_num_layers': 1, 'max_seq_len': 20}
+
+# Right now, LXMERT requires features directly and not images
+
+feat = torch.rand(128,36,2048)
+# Pos is the ROI Features coming from detector (e.g Faster RCNN)
+
+pos = torch.rand(128,36,4)
+# Questions associated with images
+
+ques = ['Are there any people in this photo?']*128
+
+# Define how many answers are there in the dataset
+
+model = LXMERT_Adaptive(3129, params)
+logits = model(feat, pos, ques)</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Acknowledgements">Acknowledgements<a class="anchor-link" href="#Acknowledgements">&#182;</a></h4><ul>
+<li><a href="https://github.com/huggingface/transformers/">Hugging face Transformer</a></li>
+<li><a href="https://github.com/facebookresearch/adaptive-span">Adaptive Attention Span for Transformers</a></li>
+<li><a href="https://github.com/deep-spin/entmax">entmax</a></li>
+<li><a href="https://github.com/airsplay/lxmert">LXMERT</a></li>
+</ul>
 
 </div>
 </div>
