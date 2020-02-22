@@ -7,8 +7,10 @@ index = {"AdaptiveSpan": "adaptive_span.ipynb",
          "EntmaxAlpha": "entmax.ipynb",
          "EntmaxBisectFunction": "entmax.ipynb",
          "entmax_bisect": "entmax.ipynb",
+         "Lamb": "lamb.ipynb",
          "LayerDrop": "layerdrop.ipynb",
          "LayerDrop_Cross": "layerdrop.ipynb",
+         "Lookahead": "lookahead.ipynb",
          "logger": "lxmert_utils.ipynb",
          "url_to_filename": "lxmert.file_utils.ipynb",
          "filename_to_url": "lxmert.file_utils.ipynb",
@@ -52,20 +54,25 @@ index = {"AdaptiveSpan": "adaptive_span.ipynb",
          "BertPreTrainedModel": "lxmert_utils.ipynb",
          "AnswerTable": "lxmert_utils.ipynb",
          "load_lxmert_qa": "lxmert_utils.ipynb",
-         "params": "model_tests.ipynb",
-         "feat": "model_tests.ipynb",
-         "pos": "model_tests.ipynb",
-         "ques": "model_tests.ipynb",
-         "model": "model_tests.ipynb",
-         "logits": "model_tests.ipynb"}
+         "params": "model_test.ipynb",
+         "feat": "model_test.ipynb",
+         "pos": "model_test.ipynb",
+         "ques": "model_test.ipynb",
+         "model": "optim_test.ipynb",
+         "logits": "model_test.ipynb",
+         "base_optim": "optim_test.ipynb",
+         "optim": "optim_test.ipynb"}
 
 modules = ["adaptive/adaptive_span.py",
            "adaptive/entmax.py",
+           "optimizers/lamb.py",
            "adaptive/layerdrop.py",
+           "optimizers/lookahead.py",
            "models/lxmert/file_utils.py",
            "models/lxmert/lxmert.py",
            "models/lxmert/lxmert_utils.py",
-           "tests/model.py"]
+           "tests/model.py",
+           "tests/optimizer.py"]
 
 doc_url = "https://prajjwal1.github.io/fluence/"
 

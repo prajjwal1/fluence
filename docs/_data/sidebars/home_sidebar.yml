@@ -16,8 +16,14 @@ entries:
       title: fluence.adaptive.entmax
       url: /entmax
     - output: web,pdf
+      title: Title
+      url: /lamb
+    - output: web,pdf
       title: fluence.adaptive.layerdrop
       url: /layerdrop
+    - output: web,pdf
+      title: fluence.optimizers.lookahead
+      url: /lookahead
     - output: web,pdf
       title: fluence.models.lxmert.file_utils
       url: /lxmert.file_utils
@@ -29,7 +35,10 @@ entries:
       url: /lxmert_utils
     - output: web,pdf
       title: Tests/Model
-      url: /model_tests
+      url: /model_test
+    - output: web,pdf
+      title: fluence.tests.optimizer
+      url: /optim_test
     output: web
     title: fluence
   output: web

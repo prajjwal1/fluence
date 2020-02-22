@@ -25,7 +25,14 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Installing">Installing<a class="anchor-link" href="#Installing">&#182;</a></h2>
+<p><img src="https://github.com/prajjwal1/fluence/workflows/CI/badge.svg" alt=""></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Installing">Installing<a class="anchor-link" href="#Installing">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -43,6 +50,7 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 <li><a href="https://arxiv.org/abs/1905.07799">Adaptive Attention Span in Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.00015">Adaptively Sparse Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.11556">Reducing Transformer Depth on Demand with Structured Dropout</a></li>
+<li>Optimizers: Lamb, Lookahead</li>
 </ul>
 
 </div>
@@ -50,10 +58,11 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure">&#182;</a></h2>
+<h1 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure">&#182;</a></h1>
 <pre><code>fluence
     - adaptive     # Implements Adaptive Modules
     - models       # Models
+    - optimizers   # optimizers 
     - tests        # Unit tests</code></pre>
 
 </div>
@@ -61,7 +70,7 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Documentation">Documentation<a class="anchor-link" href="#Documentation">&#182;</a></h2><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow</p>
+<h1 id="Documentation">Documentation<a class="anchor-link" href="#Documentation">&#182;</a></h1><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow</p>
 
 </div>
 </div>
@@ -69,7 +78,7 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Usage">Usage<a class="anchor-link" href="#Usage">&#182;</a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
-<h4 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span">&#182;</a></h4>
+<h3 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span">&#182;</a></h3>
 <pre><code>import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
 config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
@@ -91,7 +100,7 @@ adaptive_span(attention_scores_1).shape</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">Using Entmax as a replacement for softmax with learnable alpha values<a class="anchor-link" href="#Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">&#182;</a></h4>
+<h3 id="Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">Using Entmax as a replacement for softmax with learnable alpha values<a class="anchor-link" href="#Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -108,7 +117,7 @@ attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36))</code></pre
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Using-Layerdrop">Using Layerdrop<a class="anchor-link" href="#Using-Layerdrop">&#182;</a></h4>
+<h3 id="Using-Layerdrop">Using Layerdrop<a class="anchor-link" href="#Using-Layerdrop">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -159,6 +168,19 @@ ques = ['Are there any people in this photo?']*128
 
 model = LXMERT_Adaptive(3129, params)
 logits = model(feat, pos, ques)</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="fluence.optimizer">fluence.optimizer<a class="anchor-link" href="#fluence.optimizer">&#182;</a></h3>
+<pre><code>from fluence.optimizers.lamb import Lamb
+from fluence.optimizers.lookahead import Lookahead
+
+model = torchvision.models.AlexNet()                        # Can be a transformer
+base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
+optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)</code></pre>
 
 </div>
 </div>
