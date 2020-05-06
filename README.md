@@ -1,12 +1,8 @@
 # Fluence
-> Fluence is a deep learning library based on Pytorch for attention based approaches.
+> Fluence is a deep learning library for transformers + self attention methods.
 
 
 ![](https://github.com/prajjwal1/fluence/workflows/CI/badge.svg)
-
-# Installing
-
-`pip install fluence`
 
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
@@ -27,7 +23,7 @@ fluence
 Please head to this [link](prajjwal1.github.io/fluence) to learn how you can integrate fluence with your workflow
 
 ## Usage
-Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples
+Right now, it consists of major adaptive computation approaches which have been tested with transformers. Here are some of the examples
 
 
 ### Using Adaptive Attention Span
