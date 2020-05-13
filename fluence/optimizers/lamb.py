@@ -3,14 +3,12 @@
 __all__ = ["Lamb"]
 
 # Cell
-import collections
-import math
-
 import torch
 from torch.optim import Optimizer
 
-
 # Cell
+
+
 class Lamb(Optimizer):
     r"""Implements Lamb algorithm.
     It has been proposed in `Large Batch Optimization for Deep Learning:

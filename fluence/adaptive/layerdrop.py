@@ -10,7 +10,8 @@ from torch import nn
 # Cell
 class LayerDrop(nn.Module):
     """
-    Implements Reducing Transformer Depth on Demand with Structured Dropout (https://arxiv.org/abs/1909.11556)
+    Implements Reducing Transformer Depth on Demand with Structured Dropout
+    [Paper](https://arxiv.org/abs/1909.11556)
 
     Arguments:
         module_list (nn.ModuleList): List from which layers are to dropped.

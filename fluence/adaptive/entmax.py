@@ -3,13 +3,15 @@
 __all__ = ["AlphaChooser", "EntmaxAlpha", "EntmaxBisectFunction", "entmax_bisect"]
 
 # Cell
-## Implementation of Entmax Bisect functions has been adapted from https://github.com/deep-spin/entmax/
+# Implementation of Entmax Bisect functions has been adapted from
+# https://github.com/deep-spin/entmax/
 import torch
 from torch import nn
 from torch.autograd import Function
 
-
 # Cell
+
+
 class AlphaChooser(torch.nn.Module):
     def __init__(self, head_count):
         super(AlphaChooser, self).__init__()
@@ -30,12 +32,10 @@ class EntmaxAlpha(nn.Module):
     def forward(self, att_scores):
         batch_size, head_count, query_len, key_len = att_scores.size()
 
-        expanded_alpha = (
-            self.alpha.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
-        )  # [1,nb_heads,1,1]
-        expanded_alpha = expanded_alpha.expand(
-            (batch_size, -1, query_len, 1)
-        )  # [bs, nb_heads, query_len,1]
+        expanded_alpha = self.alpha.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
+        # [1,nb_heads,1,1]
+        expanded_alpha = expanded_alpha.expand((batch_size, -1, query_len, 1))
+        # [bs, nb_heads, query_len,1]
         p_star = entmax_bisect(att_scores, expanded_alpha)
         return p_star
 

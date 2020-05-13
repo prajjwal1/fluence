@@ -6,6 +6,10 @@ fluence: $(SRC)
 	nbdev_build_lib
 	touch fluence
 
+style:
+	isort --recursive fluence examples
+	black --line-length 119 --target-version py35 fluence examples
+
 docs_serve: docs
 	cd docs && bundle exec jekyll serve
 
