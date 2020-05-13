@@ -30,6 +30,8 @@ class AdaptiveSpan(nn.Module):
                         attention scores
 
     Example::
+
+
         >>> config = {'attn_span': 1024,
                      'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
                      'adapt_span_init': 0.002, 'adapt_span_cache': True,
@@ -56,7 +58,7 @@ class AdaptiveSpan(nn.Module):
     ):
 
         super(AdaptiveSpan, self).__init__()
-        self.attn_span = attn_span  # [attn_span]
+        self.attn_span = attn_span
         self.ramp_size = adapt_span_ramp
         self.bs = bs
         self.nb_heads = nb_heads

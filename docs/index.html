@@ -29,7 +29,8 @@ description: "Fluence is a deep learning library based on Pytorch for attention 
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="https://github.com/prajjwal1/fluence/workflows/CI/badge.svg" alt=""></p>
+<p><img src="https://github.com/prajjwal1/fluence/workflows/CI/badge.svg" alt="">
+<a href="https://badge.fury.io/py/fluence"><img src="https://badge.fury.io/py/fluence.svg" alt="PyPI version"></a></p>
 
 </div>
 </div>
@@ -127,11 +128,11 @@ attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36))</code></pre
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 
-<pre><code>from fluence.adaptive.layerdrop import LayerDrop
+<pre><code>from fluence.adaptive.layerdrop import Layerdrop
 from torch import nn
 net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
 layers_to_drop = 2
-layerdrop = LayerDrop(net, layers_to_drop)
+layerdrop = Layerdrop(net, layers_to_drop)
 output = layerdrop(torch.rand(10,2))</code></pre>
 
 </div>

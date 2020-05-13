@@ -4,7 +4,7 @@
     "fluence.adaptive.adaptive_span": "/adaptive_span",
     "fluence.adaptive.entmax": "/entmax",
     "fluence.optimizers.lamb": "/lamb",
-    "fluence.adaptive.layerdrop": "/layerdrop",
+    "fluence.nn.layerdrop": "/layerdrop",
     "fluence.optimizers.lookahead": "/lookahead"
   }
 }

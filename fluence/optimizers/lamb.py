@@ -4,7 +4,6 @@ __all__ = ["Lamb"]
 
 # Cell
 import torch
-import torchvision
 from torch.optim import Optimizer
 
 # Cell

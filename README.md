@@ -3,6 +3,7 @@
 
 
 ![](https://github.com/prajjwal1/fluence/workflows/CI/badge.svg)
+[![PyPI version](https://badge.fury.io/py/fluence.svg)](https://badge.fury.io/py/fluence)
 
 # Installing
 
@@ -60,11 +61,11 @@ attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36))
 ### Using Layerdrop
 
 ```
-from fluence.adaptive.layerdrop import LayerDrop
+from fluence.adaptive.layerdrop import Layerdrop
 from torch import nn
 net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
 layers_to_drop = 2
-layerdrop = LayerDrop(net, layers_to_drop)
+layerdrop = Layerdrop(net, layers_to_drop)
 output = layerdrop(torch.rand(10,2))
 ```
 

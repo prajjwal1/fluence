@@ -3,7 +3,7 @@
 __all__ = ["AlphaChooser", "EntmaxAlpha", "EntmaxBisectFunction", "entmax_bisect"]
 
 # Cell
-# Implementation of Entmax Bisect functions has been adapted from
+# Implementation of Entmax Bisect function has been adapted from
 # https://github.com/deep-spin/entmax/
 import torch
 from torch import nn
@@ -13,6 +13,11 @@ from torch.autograd import Function
 
 
 class AlphaChooser(torch.nn.Module):
+    """
+    It manages the alpha values in alpha-entmax
+    function.
+    """
+
     def __init__(self, head_count):
         super(AlphaChooser, self).__init__()
         self.pre_alpha = nn.Parameter(torch.randn(head_count))
@@ -129,7 +134,8 @@ class EntmaxBisectFunction(Function):
 
 
 def entmax_bisect(X, alpha=1.5, dim=-1, n_iter=50, ensure_sum_one=True):
-    """alpha-entmax: normalizing sparse transform (a la softmax).
+    """
+    alpha-entmax: normalizing sparse transform (a la softmax).
     Solves the optimization problem:
         max_p <x, p> - H_a(p)    s.t.    p >= 0, sum(p) == 1.
     where H_a(p) is the Tsallis alpha-entropy with custom alpha >= 1,

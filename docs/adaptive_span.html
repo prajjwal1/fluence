@@ -39,10 +39,10 @@ description: "Implements Adaptive Attention Span"
 
 
 
-<div id="3b6d44fb-88a5-44e5-80af-ed61c0d3acf8"></div>
+<div id="68697d61-7b31-4370-b617-43ffc74de94f"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#3b6d44fb-88a5-44e5-80af-ed61c0d3acf8');
+var element = $('#68697d61-7b31-4370-b617-43ffc74de94f');
 
             setTimeout(function() {
                 var nbb_cell_id = 5;
@@ -82,10 +82,10 @@ var element = $('#3b6d44fb-88a5-44e5-80af-ed61c0d3acf8');
 
 
 
-<div id="7304a051-0c2f-47bf-a90a-2c98486dc96a"></div>
+<div id="5c855883-a023-48f2-87c6-eff9ecc2d431"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#7304a051-0c2f-47bf-a90a-2c98486dc96a');
+var element = $('#5c855883-a023-48f2-87c6-eff9ecc2d431');
 
             setTimeout(function() {
                 var nbb_cell_id = 6;
@@ -171,7 +171,8 @@ var element = $('#7304a051-0c2f-47bf-a90a-2c98486dc96a');
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Define a configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;attn_span&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
     <span class="s2">&quot;adapt_span_loss_coeff&quot;</span><span class="p">:</span> <span class="mf">0.000005</span><span class="p">,</span>
     <span class="s2">&quot;adapt_span_ramp&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
@@ -195,10 +196,10 @@ var element = $('#7304a051-0c2f-47bf-a90a-2c98486dc96a');
 
 
 
-<div id="cdc39698-0651-4ce0-9046-a60820559344"></div>
+<div id="d8631d4b-bf4a-4c4d-8a4e-f843ddd2b190"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#cdc39698-0651-4ce0-9046-a60820559344');
+var element = $('#d8631d4b-bf4a-4c4d-8a4e-f843ddd2b190');
 
             setTimeout(function() {
                 var nbb_cell_id = 13;
@@ -233,75 +234,26 @@ var element = $('#cdc39698-0651-4ce0-9046-a60820559344');
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adaptive_span</span> <span class="o">=</span> <span class="n">AdaptiveSpan</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import AdaptiveSpan</span>
+<span class="n">adaptive_span</span> <span class="o">=</span> <span class="n">AdaptiveSpan</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Attention weights come from standard softmax</span>
+<span class="n">attention_weights_1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+<span class="n">attention_weights_2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Feed the weights to apply the soft-masking function</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">attention_weights_1</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">attention_weights_2</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+
+<span class="c1"># Check the span characterstics</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_current_avg_span</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_current_max_span</span><span class="p">())</span>
+
+<span class="c1"># Clamp the parameter between range [0,1]</span>
 <span class="n">adaptive_span</span><span class="o">.</span><span class="n">clamp_param</span><span class="p">()</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_trim_len</span><span class="p">())</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>23
-1024
-0
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-
-<div id="ee00fd48-f533-41f7-b337-1342563d72a8"></div>
-<div class="output_subarea output_javascript ">
-<script type="text/javascript">
-var element = $('#ee00fd48-f533-41f7-b337-1342563d72a8');
-
-            setTimeout(function() {
-                var nbb_cell_id = 11;
-                var nbb_unformatted_code = "adaptive_span = AdaptiveSpan(**config)\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\nadaptive_span.clamp_param()\nprint(adaptive_span.get_trim_len())";
-                var nbb_formatted_code = "adaptive_span = AdaptiveSpan(**config)\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\nadaptive_span.clamp_param()\nprint(adaptive_span.get_trim_len())";
-                var nbb_cells = Jupyter.notebook.get_cells();
-                for (var i = 0; i < nbb_cells.length; ++i) {
-                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
-                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
-                             nbb_cells[i].set_text(nbb_formatted_code);
-                        }
-                        break;
-                    }
-                }
-            }, 500);
-            
-</script>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -316,6 +268,9 @@ var element = $('#ee00fd48-f533-41f7-b337-1342563d72a8');
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>torch.Size([128, 12, 26, 36])
 torch.Size([128, 12, 26, 20])
+57
+1024
+0
 </pre>
 </div>
 </div>
@@ -325,15 +280,15 @@ torch.Size([128, 12, 26, 20])
 
 
 
-<div id="4ff30b18-453d-419b-acd4-60072573bd6c"></div>
+<div id="e9b835a4-ede7-4cdc-b242-e045dd878641"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#4ff30b18-453d-419b-acd4-60072573bd6c');
+var element = $('#e9b835a4-ede7-4cdc-b242-e045dd878641');
 
             setTimeout(function() {
-                var nbb_cell_id = 12;
-                var nbb_unformatted_code = "print(adaptive_span(torch.randn(128, 12, 26, 36)).shape)\nprint(adaptive_span(torch.randn(128, 12, 26, 20)).shape)";
-                var nbb_formatted_code = "print(adaptive_span(torch.randn(128, 12, 26, 36)).shape)\nprint(adaptive_span(torch.randn(128, 12, 26, 20)).shape)";
+                var nbb_cell_id = 17;
+                var nbb_unformatted_code = "# Import AdaptiveSpan\nadaptive_span = AdaptiveSpan(**config)\n\n# Attention weights come from standard softmax\nattention_weights_1 = torch.randn(128, 12, 26, 36)\nattention_weights_2 = torch.randn(128, 12, 26, 20)\n\n# Feed the weights to apply the soft-masking function\nprint(adaptive_span(attention_weights_1).shape)\nprint(adaptive_span(attention_weights_2).shape)\n\n\n# Check the span characterstics\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\n\n# Clamp the parameter between range [0,1]\nadaptive_span.clamp_param()\n\nprint(adaptive_span.get_trim_len())";
+                var nbb_formatted_code = "# Import AdaptiveSpan\nadaptive_span = AdaptiveSpan(**config)\n\n# Attention weights come from standard softmax\nattention_weights_1 = torch.randn(128, 12, 26, 36)\nattention_weights_2 = torch.randn(128, 12, 26, 20)\n\n# Feed the weights to apply the soft-masking function\nprint(adaptive_span(attention_weights_1).shape)\nprint(adaptive_span(attention_weights_2).shape)\n\n\n# Check the span characterstics\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\n\n# Clamp the parameter between range [0,1]\nadaptive_span.clamp_param()\n\nprint(adaptive_span.get_trim_len())";
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {

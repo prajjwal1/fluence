@@ -6,7 +6,6 @@ __all__ = ["Lookahead"]
 from collections import defaultdict
 
 import torch
-import torchvision
 from torch.optim.optimizer import Optimizer
 
 

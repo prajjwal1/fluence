@@ -9,8 +9,8 @@ index = {
     "EntmaxBisectFunction": "entmax.ipynb",
     "entmax_bisect": "entmax.ipynb",
     "Lamb": "lamb.ipynb",
-    "LayerDrop": "layerdrop.ipynb",
-    "LayerDrop_Cross": "layerdrop.ipynb",
+    "Layerdrop": "layerdrop.ipynb",
+    "Layerdrop_Cross": "layerdrop.ipynb",
     "Lookahead": "lookahead.ipynb",
 }
 

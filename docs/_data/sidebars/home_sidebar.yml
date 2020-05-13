@@ -19,7 +19,7 @@ entries:
       title: fluence.optimizers.lamb
       url: /lamb
     - output: web,pdf
-      title: fluence.adaptive.layerdrop
+      title: fluence.nn.layerdrop
       url: /layerdrop
     - output: web,pdf
       title: fluence.optimizers.lookahead

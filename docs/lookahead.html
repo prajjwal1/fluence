@@ -51,10 +51,10 @@ description: "Implements Lookahead optimizer"
 
 
 
-<div id="0924b835-007f-4121-a5d6-2556705faaa9"></div>
+<div id="fc79bad8-3ac2-4e45-974b-37889d3755dd"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#0924b835-007f-4121-a5d6-2556705faaa9');
+var element = $('#fc79bad8-3ac2-4e45-974b-37889d3755dd');
 
             setTimeout(function() {
                 var nbb_cell_id = 2;
@@ -94,15 +94,15 @@ var element = $('#0924b835-007f-4121-a5d6-2556705faaa9');
 
 
 
-<div id="55b48661-42bb-440f-9244-d4decd1bd682"></div>
+<div id="e795d7d6-eb62-4111-85b4-adee7981ac4b"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#55b48661-42bb-440f-9244-d4decd1bd682');
+var element = $('#e795d7d6-eb62-4111-85b4-adee7981ac4b');
 
             setTimeout(function() {
-                var nbb_cell_id = 3;
-                var nbb_unformatted_code = "# export\nfrom collections import defaultdict\n\nimport torch\nfrom torch.optim.optimizer import Optimizer\nimport torchvision";
-                var nbb_formatted_code = "# export\nfrom collections import defaultdict\n\nimport torch\nfrom torch.optim.optimizer import Optimizer\nimport torchvision";
+                var nbb_cell_id = 11;
+                var nbb_unformatted_code = "# export\nfrom collections import defaultdict\n\nimport torch\nfrom torch.optim.optimizer import Optimizer";
+                var nbb_formatted_code = "# export\nfrom collections import defaultdict\n\nimport torch\nfrom torch.optim.optimizer import Optimizer";
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
@@ -146,10 +146,10 @@ var element = $('#55b48661-42bb-440f-9244-d4decd1bd682');
 
 
 
-<div id="d32cab02-900d-4a5d-95fb-7cdb7e7fbfd0"></div>
+<div id="79a3a1da-3b0a-4579-afe8-38b91f3f5d16"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#d32cab02-900d-4a5d-95fb-7cdb7e7fbfd0');
+var element = $('#79a3a1da-3b0a-4579-afe8-38b91f3f5d16');
 
             setTimeout(function() {
                 var nbb_cell_id = 5;
@@ -188,7 +188,7 @@ var element = $('#d32cab02-900d-4a5d-95fb-7cdb7e7fbfd0');
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Lookahead" class="doc_header"><code>class</code> <code>Lookahead</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/optimizers/lookahead.py#L13" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Lookahead</code>(<strong><code>base_optimizer</code></strong>, <strong><code>alpha</code></strong>=<em><code>0.5</code></em>, <strong><code>k</code></strong>=<em><code>6</code></em>) :: <code>Optimizer</code></p>
+<h2 id="Lookahead" class="doc_header"><code>class</code> <code>Lookahead</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/optimizers/lookahead.py#L12" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Lookahead</code>(<strong><code>base_optimizer</code></strong>, <strong><code>alpha</code></strong>=<em><code>0.5</code></em>, <strong><code>k</code></strong>=<em><code>6</code></em>) :: <code>Optimizer</code></p>
 </blockquote>
 <p>Base class for all optimizers.</p>
 <p>.. warning::
@@ -218,7 +218,8 @@ var element = $('#d32cab02-900d-4a5d-95fb-7cdb7e7fbfd0');
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">AlexNet</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">AlexNet</span><span class="p">()</span>
 <span class="n">base_optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 <span class="n">optim</span> <span class="o">=</span> <span class="n">Lookahead</span><span class="p">(</span><span class="n">base_optim</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span>
@@ -237,15 +238,15 @@ var element = $('#d32cab02-900d-4a5d-95fb-7cdb7e7fbfd0');
 
 
 
-<div id="aadf2a36-a7c2-4c44-98a3-f8edf4eb5269"></div>
+<div id="2a190e41-62f4-4017-b143-1544449a2f66"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#aadf2a36-a7c2-4c44-98a3-f8edf4eb5269');
+var element = $('#2a190e41-62f4-4017-b143-1544449a2f66');
 
             setTimeout(function() {
-                var nbb_cell_id = 10;
-                var nbb_unformatted_code = "model = torchvision.models.AlexNet()\nbase_optim = torch.optim.Adam(model.parameters())\noptim = Lookahead(base_optim, k=5, alpha=0.8)\noutput = model(torch.rand(128, 3, 64, 64))\noptim.step()";
-                var nbb_formatted_code = "model = torchvision.models.AlexNet()\nbase_optim = torch.optim.Adam(model.parameters())\noptim = Lookahead(base_optim, k=5, alpha=0.8)\noutput = model(torch.rand(128, 3, 64, 64))\noptim.step()";
+                var nbb_cell_id = 12;
+                var nbb_unformatted_code = "import torchvision\nmodel = torchvision.models.AlexNet()\nbase_optim = torch.optim.Adam(model.parameters())\noptim = Lookahead(base_optim, k=5, alpha=0.8)\noutput = model(torch.rand(128, 3, 64, 64))\noptim.step()";
+                var nbb_formatted_code = "import torchvision\n\nmodel = torchvision.models.AlexNet()\nbase_optim = torch.optim.Adam(model.parameters())\noptim = Lookahead(base_optim, k=5, alpha=0.8)\noutput = model(torch.rand(128, 3, 64, 64))\noptim.step()";
                 var nbb_cells = Jupyter.notebook.get_cells();
                 for (var i = 0; i < nbb_cells.length; ++i) {
                     if (nbb_cells[i].input_prompt_number == nbb_cell_id) {

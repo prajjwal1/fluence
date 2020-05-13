@@ -31,42 +31,6 @@ description: "Entmax as a replacement for softmax to get sparse attention weight
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-
-<div id="d2073c35-c3c4-412b-8b65-edb65b016718"></div>
-<div class="output_subarea output_javascript ">
-<script type="text/javascript">
-var element = $('#d2073c35-c3c4-412b-8b65-edb65b016718');
-
-            setTimeout(function() {
-                var nbb_cell_id = 2;
-                var nbb_unformatted_code = "# export\n# Implementation of Entmax Bisect functions has been adapted from\n# https://github.com/deep-spin/entmax/\nimport torch\nfrom torch import nn\nfrom torch.autograd import Function";
-                var nbb_formatted_code = "# export\n# Implementation of Entmax Bisect functions has been adapted from\n# https://github.com/deep-spin/entmax/\nimport torch\nfrom torch import nn\nfrom torch.autograd import Function";
-                var nbb_cells = Jupyter.notebook.get_cells();
-                for (var i = 0; i < nbb_cells.length; ++i) {
-                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
-                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
-                             nbb_cells[i].set_text(nbb_formatted_code);
-                        }
-                        break;
-                    }
-                }
-            }, 500);
-            
-</script>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -82,10 +46,10 @@ var element = $('#d2073c35-c3c4-412b-8b65-edb65b016718');
 
 
 
-<div id="e06bf01a-a012-49e4-8a56-deb312f78605"></div>
+<div id="bad0067d-19a0-4f7e-a944-d4895817b18c"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#e06bf01a-a012-49e4-8a56-deb312f78605');
+var element = $('#bad0067d-19a0-4f7e-a944-d4895817b18c');
 
             setTimeout(function() {
                 var nbb_cell_id = 3;
@@ -126,27 +90,8 @@ var element = $('#e06bf01a-a012-49e4-8a56-deb312f78605');
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="AlphaChooser" class="doc_header"><code>class</code> <code>AlphaChooser</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AlphaChooser</code>(<strong><code>head_count</code></strong>) :: <code>Module</code></p>
 </blockquote>
-<p>Base class for all neural network modules.</p>
-<p>Your models should also subclass this class.</p>
-<p>Modules can also contain other Modules, allowing to nest them in
-a tree structure. You can assign the submodules as regular attributes::</p>
-
-<pre><code>import torch.nn as nn
-import torch.nn.functional as F
-
-class Model(nn.Module):
-    def __init__(self):
-        super(Model, self).__init__()
-        self.conv1 = nn.Conv2d(1, 20, 5)
-        self.conv2 = nn.Conv2d(20, 20, 5)
-
-    def forward(self, x):
-        x = F.relu(self.conv1(x))
-        return F.relu(self.conv2(x))
-
-</code></pre>
-<p>Submodules assigned in this way will be registered, and will have their
-parameters converted too when you call :meth:<code>to</code>, etc.</p>
+<p>It manages the alpha values in alpha-entmax
+function.</p>
 
 </div>
 
@@ -169,7 +114,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EntmaxAlpha" class="doc_header"><code>class</code> <code>EntmaxAlpha</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxAlpha</code>(<strong><code>head_count</code></strong>, <strong><code>dim</code></strong>=<em><code>0</code></em>) :: <code>Module</code></p>
+<h2 id="EntmaxAlpha" class="doc_header"><code>class</code> <code>EntmaxAlpha</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxAlpha</code>(<strong><code>head_count</code></strong>, <strong><code>dim</code></strong>=<em><code>0</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -214,7 +159,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EntmaxBisectFunction" class="doc_header"><code>class</code> <code>EntmaxBisectFunction</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L45" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxBisectFunction</code>() :: <code>Function</code></p>
+<h2 id="EntmaxBisectFunction" class="doc_header"><code>class</code> <code>EntmaxBisectFunction</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L48" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxBisectFunction</code>() :: <code>Function</code></p>
 </blockquote>
 <p>Records operation history and defines formulas for differentiating ops.</p>
 <p>Every operation performed on :class:<code>Tensor</code> s creates a new function
@@ -266,7 +211,7 @@ extending torch.autograd.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="entmax_bisect" class="doc_header"><code>entmax_bisect</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>entmax_bisect</code>(<strong><code>X</code></strong>, <strong><code>alpha</code></strong>=<em><code>1.5</code></em>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n_iter</code></strong>=<em><code>50</code></em>, <strong><code>ensure_sum_one</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="entmax_bisect" class="doc_header"><code>entmax_bisect</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>entmax_bisect</code>(<strong><code>X</code></strong>, <strong><code>alpha</code></strong>=<em><code>1.5</code></em>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n_iter</code></strong>=<em><code>50</code></em>, <strong><code>ensure_sum_one</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>alpha-entmax: normalizing sparse transform (a la softmax).
 Solves the optimization problem:
@@ -326,10 +271,10 @@ ensure_sum_one : bool,
 
 
 
-<div id="6668a063-9fb0-404a-9ce5-eeece47b83b5"></div>
+<div id="4dca6fcc-d6cb-49bd-90bf-3cd4b9f5c279"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#6668a063-9fb0-404a-9ce5-eeece47b83b5');
+var element = $('#4dca6fcc-d6cb-49bd-90bf-3cd4b9f5c279');
 
             setTimeout(function() {
                 var nbb_cell_id = 4;
@@ -379,10 +324,10 @@ var element = $('#6668a063-9fb0-404a-9ce5-eeece47b83b5');
 
 
 
-<div id="485e8846-b7b7-4c65-ac7e-12601ec51545"></div>
+<div id="c8a70f1f-837d-4d6b-83e1-fecb4a8380c1"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#485e8846-b7b7-4c65-ac7e-12601ec51545');
+var element = $('#c8a70f1f-837d-4d6b-83e1-fecb4a8380c1');
 
             setTimeout(function() {
                 var nbb_cell_id = 5;
@@ -432,10 +377,10 @@ var element = $('#485e8846-b7b7-4c65-ac7e-12601ec51545');
 
 
 
-<div id="b9a916cc-60f9-4ebe-aee0-eca8e89bfc17"></div>
+<div id="0285d40b-633a-4542-bc10-b0faf25317ce"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#b9a916cc-60f9-4ebe-aee0-eca8e89bfc17');
+var element = $('#0285d40b-633a-4542-bc10-b0faf25317ce');
 
             setTimeout(function() {
                 var nbb_cell_id = 8;
@@ -463,6 +408,14 @@ var element = $('#b9a916cc-60f9-4ebe-aee0-eca8e89bfc17');
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Replace softmax with entmax_alpha for sparse mappings
+of attention weights</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -471,7 +424,6 @@ var element = $('#b9a916cc-60f9-4ebe-aee0-eca8e89bfc17');
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">attention_scores</span> <span class="o">=</span> <span class="n">entmax_alpha</span><span class="p">(</span><span class="n">attention_scores</span><span class="p">)</span>
-<span class="c1"># This is meant to be replaced with softmax</span>
 </pre></div>
 
     </div>
@@ -486,10 +438,10 @@ var element = $('#b9a916cc-60f9-4ebe-aee0-eca8e89bfc17');
 
 
 
-<div id="d212dc8a-114d-4301-8599-7b1600d9f978"></div>
+<div id="7a5269b2-41d0-4cb7-80dc-95f5ccac10d7"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#d212dc8a-114d-4301-8599-7b1600d9f978');
+var element = $('#7a5269b2-41d0-4cb7-80dc-95f5ccac10d7');
 
             setTimeout(function() {
                 var nbb_cell_id = 7;
