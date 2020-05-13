@@ -3,8 +3,8 @@
     "Overview": "/",
     "fluence.adaptive.adaptive_span": "/adaptive_span",
     "fluence.adaptive.entmax": "/entmax",
-    "fluence.optimizers.lamb": "/lamb",
+    "fluence.optim.lamb": "/lamb",
     "fluence.nn.layerdrop": "/layerdrop",
-    "fluence.optimizers.lookahead": "/lookahead"
+    "fluence.optim.lookahead": "/lookahead"
   }
 }

@@ -7,12 +7,12 @@ fluence: $(SRC)
 	touch fluence
 
 style:
-	isort --recursive fluence examples
-	black --line-length 119 --target-version py35 fluence examples
+	isort --recursive fluence 
+	black --line-length 119 --target-version py35 fluence 
 
 quality:
-	black --check --line-length 119 --target-version py35 fluence examples
-	isort --check-only --recursive fluence examples
+	black --check --line-length 119 --target-version py35 fluence 
+	isort --check-only --recursive fluence 
 	flake8 fluence examples 
 
 docs_serve: docs

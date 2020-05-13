@@ -16,13 +16,13 @@ entries:
       title: fluence.adaptive.entmax
       url: /entmax
     - output: web,pdf
-      title: fluence.optimizers.lamb
+      title: fluence.optim.lamb
       url: /lamb
     - output: web,pdf
       title: fluence.nn.layerdrop
       url: /layerdrop
     - output: web,pdf
-      title: fluence.optimizers.lookahead
+      title: fluence.optim.lookahead
       url: /lookahead
     output: web
     title: fluence

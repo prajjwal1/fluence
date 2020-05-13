@@ -17,9 +17,9 @@ index = {
 modules = [
     "adaptive/adaptive_span.py",
     "adaptive/entmax.py",
-    "optimizers/lamb.py",
+    "optim/lamb.py",
     "adaptive/layerdrop.py",
-    "optimizers/lookahead.py",
+    "optim/lookahead.py",
 ]
 
 doc_url = "https://prajjwal1.github.io/fluence/"
