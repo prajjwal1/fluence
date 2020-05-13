@@ -47,7 +47,5 @@ class LayerDrop_Cross(nn.Module):
         x = torch.randint(0, self.length, (self.layers_to_drop,))
         for index, layer in enumerate(self.module_list):
             if index not in x:
-                lang_feats, visn_feats = layer(
-                    lang_feats, lang_attention_mask, visn_feats, visn_attention_mask
-                )  #
+                lang_feats, visn_feats = layer(lang_feats, lang_attention_mask, visn_feats, visn_attention_mask)  #
         return lang_feats, visn_feats

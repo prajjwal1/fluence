@@ -10,6 +10,11 @@ style:
 	isort --recursive fluence examples
 	black --line-length 119 --target-version py35 fluence examples
 
+quality:
+	black --check --line-length 119 --target-version py35 fluence examples
+	isort --check-only --recursive fluence examples tests
+	flake8 fluence examples tests
+
 docs_serve: docs
 	cd docs && bundle exec jekyll serve
 

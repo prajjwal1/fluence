@@ -13,9 +13,7 @@ from ..optimizers.lookahead import Lookahead
 model = torchvision.models.AlexNet()
 
 # Cell
-base_optim = Lamb(
-    params=model.parameters(), lr=1e-5, weight_decay=1.2e-6, min_trust=0.25
-)
+base_optim = Lamb(params=model.parameters(), lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
 optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)
 
 # Cell
