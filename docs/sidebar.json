@@ -3,13 +3,8 @@
     "Overview": "/",
     "fluence.adaptive.adaptive_span": "/adaptive_span",
     "fluence.adaptive.entmax": "/entmax",
-    "Title": "/lamb",
+    "fluence.optimizers.lamb": "/lamb",
     "fluence.adaptive.layerdrop": "/layerdrop",
-    "fluence.optimizers.lookahead": "/lookahead",
-    "fluence.models.lxmert.file_utils": "/lxmert.file_utils",
-    "LXMERT": "/lxmert",
-    "lxmert_utils": "/lxmert_utils",
-    "Tests/Model": "/model_test",
-    "fluence.tests.optimizer": "/optim_test"
+    "fluence.optimizers.lookahead": "/lookahead"
   }
 }

@@ -12,8 +12,8 @@ style:
 
 quality:
 	black --check --line-length 119 --target-version py35 fluence examples
-	isort --check-only --recursive fluence examples tests
-	flake8 fluence examples tests
+	isort --check-only --recursive fluence examples
+	flake8 fluence examples 
 
 docs_serve: docs
 	cd docs && bundle exec jekyll serve

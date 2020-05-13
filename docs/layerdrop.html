@@ -6,6 +6,7 @@ keywords: fastai
 sidebar: home_sidebar
 
 summary: "Implements Layerdrop for regularization and minimize computational steps. Layers can be pruned during inference"
+description: "Implements Layerdrop for regularization and minimize computational steps. Layers can be pruned during inference"
 ---
 <!--
 
@@ -18,17 +19,30 @@ summary: "Implements Layerdrop for regularization and minimize computational ste
 -->
 
 <div class="container" id="notebook-container">
-    {% raw %}
         
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -40,7 +54,8 @@ summary: "Implements Layerdrop for regularization and minimize computational ste
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="LayerDrop" class="doc_header"><code>class</code> <code>LayerDrop</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/layerdrop.py#L10" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LayerDrop</code>(<strong><code>module_list</code></strong>, <strong><code>layers_to_drop</code></strong>) :: <code>Module</code></p>
 </blockquote>
-<p>Implements Reducing Transformer Depth on Demand with Structured Dropout (<a href="https://arxiv.org/abs/1909.11556">https://arxiv.org/abs/1909.11556</a>)</p>
+<p>Implements Reducing Transformer Depth on Demand with Structured Dropout
+<a href="https://arxiv.org/abs/1909.11556">Paper</a></p>
 <p>Arguments:
     module_list (nn.ModuleList): List from which layers are to dropped.
     layers_to_drop (int): number of layers to drop</p>
@@ -53,9 +68,17 @@ summary: "Implements Layerdrop for regularization and minimize computational ste
 </div>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -65,7 +88,7 @@ summary: "Implements Layerdrop for regularization and minimize computational ste
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="LayerDrop_Cross" class="doc_header"><code>class</code> <code>LayerDrop_Cross</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/layerdrop.py#L35" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LayerDrop_Cross</code>(<strong><code>module_list</code></strong>, <strong><code>layers_to_drop</code></strong>=<em><code>2</code></em>) :: <code>Module</code></p>
+<h2 id="LayerDrop_Cross" class="doc_header"><code>class</code> <code>LayerDrop_Cross</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/layerdrop.py#L37" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>LayerDrop_Cross</code>(<strong><code>module_list</code></strong>, <strong><code>layers_to_drop</code></strong>=<em><code>2</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -98,6 +121,32 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 </div>
     {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">net</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+<span class="n">layerdrop</span> <span class="o">=</span> <span class="n">LayerDrop</span><span class="p">(</span><span class="n">net</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">layerdrop</span><span class="o">.</span><span class="n">module_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">layerdrop</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">layerdrop</span><span class="o">.</span><span class="n">module_list</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

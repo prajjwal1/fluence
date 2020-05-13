@@ -6,6 +6,7 @@ keywords: fastai
 sidebar: home_sidebar
 
 summary: "Implements Adaptive Attention Span"
+description: "Implements Adaptive Attention Span"
 ---
 <!--
 
@@ -18,17 +19,102 @@ summary: "Implements Adaptive Attention Span"
 -->
 
 <div class="container" id="notebook-container">
-    {% raw %}
         
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="3b6d44fb-88a5-44e5-80af-ed61c0d3acf8"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#3b6d44fb-88a5-44e5-80af-ed61c0d3acf8');
+
+            setTimeout(function() {
+                var nbb_cell_id = 5;
+                var nbb_unformatted_code = "# export\nimport math\nimport torch\nimport torch.nn as nn";
+                var nbb_formatted_code = "# export\nimport math\nimport torch\nimport torch.nn as nn";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="7304a051-0c2f-47bf-a90a-2c98486dc96a"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#7304a051-0c2f-47bf-a90a-2c98486dc96a');
+
+            setTimeout(function() {
+                var nbb_cell_id = 6;
+                var nbb_unformatted_code = "# export\n\n\nclass AdaptiveSpan(nn.Module):\n    \"\"\"\n    Implements `Adaptive Attention Span in Transformers`\n                [Paper](https://arxiv.org/abs/1905.07799)\n\n    Arguments:\n        attn_span (int): specifies the maximum attention span\n        adapt_span_loss_coeff (float): regulates the initial value of\n                                        adapt_span_loss\n        adapt_span_ramp (int): offset value\n        adapt_span_init (float): initial additive value for the\n                                 main parameter\n        adapt_span_cache (bool): determines working of caching\n        nb_heads (int): number of attention heads\n        bs (int): batch size\n        mask_size (list): a list containing last dimension of possible\n                        attention scores\n\n    Example::\n        >>> config = {'attn_span': 1024,\n                     'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,\n                     'adapt_span_init': 0.002, 'adapt_span_cache': True,\n                     'nb_heads': 12,'bs': 128, 'mask_size': [20,36]}\n        >>> adaptive_span = AdaptiveSpan(**config)\n        >>> adaptive_span(torch.randn(128,12,26,36)).shape\n        >>> adaptive_span(torch.randn(128,12,26,20)).shape\n        >>> adaptive_span.get_current_avg_span()\n        >>> adaptive_span.get_current_max_span()\n        >>> adaptive_span.get_trim_len()\n        >>> adaptive_span.clamp_param()\n    \"\"\"\n\n    def __init__(\n        self,\n        attn_span,\n        adapt_span_loss_coeff,\n        adapt_span_ramp,\n        adapt_span_init,\n        adapt_span_cache,\n        nb_heads,\n        bs,\n        mask_size,\n    ):\n\n        super(AdaptiveSpan, self).__init__()\n        self.attn_span = attn_span  # [attn_span]\n        self.ramp_size = adapt_span_ramp\n        self.bs = bs\n        self.nb_heads = nb_heads\n        self.init_val = adapt_span_init\n        self.adapt_cache = adapt_span_cache\n        self.loss_coeff = adapt_span_loss_coeff\n        self.shape = (self.bs, self.nb_heads, 1, 1)\n\n        self.current_val = nn.Parameter(\n            torch.nn.init.kaiming_normal_(torch.empty(*self.shape)) +\n            self.init_val\n        )  # [bs,nb_heads,1,1]\n        self.mask_size = mask_size\n\n        mask_template_0 = torch.linspace(\n            1 - self.mask_size[0], 0, steps=self.mask_size[0]\n        )  # [attn_span]\n        self.register_buffer(\"mask_template_0\", mask_template_0)\n\n        if len(self.mask_size) > 1:\n            mask_template_1 = torch.linspace(\n                1 - self.mask_size[1], 0, steps=self.mask_size[1]\n            )\n            self.register_buffer(\"mask_template_1\", mask_template_1)\n\n    def mask_forward(self, x):\n        \"\"\"\n        Computes the mask and performs the multiplication operation\n        with attention weights\n        \"\"\"\n        mask_size = x.size(3)\n        if mask_size == self.mask_size[0]:\n            mask = self.mask_template_0 + self.current_val * mask_size\n        else:\n            mask = self.mask_template_1 + self.current_val * mask_size\n        mask = mask / self.ramp_size + 1\n        mask = mask.clamp(0, 1)\n        if x.size(0) == mask.size(0):\n            x = x * mask  # [bs, nb_heads, 36, 64]) [bs, nb_heads, 1, 64]\n            return x\n        else:\n            return x\n\n    def get_current_avg_span(self, include_ramp=True):\n        \"\"\"\n        Outputs average span\n        \"\"\"\n        current_size = math.ceil(self.current_val.mean().item() *\n                                 self.attn_span)\n        if include_ramp:\n            current_size += self.ramp_size\n        current_size = max(0, min(self.attn_span, current_size))\n        return current_size\n\n    def get_current_max_span(self, include_ramp=True):\n        \"\"\"\n        Determines maximum span\n        \"\"\"\n        current_size = math.ceil(self.current_val.max().item() *\n                                 self.attn_span)\n        if include_ramp:\n            current_size += self.ramp_size\n        current_size = max(0, min(self.attn_span, current_size))\n        return current_size\n\n    def clamp_param(self):\n        \"\"\"\n        Clamps the values of parameter to stay between 0 and 1\n        \"\"\"\n        self.current_val.data.clamp_(0, 1)\n\n    def get_trim_len(self):\n        \"\"\"\n        Outputs length to be trimmed\n        \"\"\"\n        L = self.attn_span\n        trim_len = min(L - 1, L - self.get_current_max_span())\n        trim_len = math.floor(trim_len / 64) * 64\n        return trim_len\n\n    def get_cache_size(self):\n        \"\"\"\n        Determine how long the cache should be\n        \"\"\"\n        if self.adapt_cache:\n            trim_len = self.get_trim_len()\n            return min(self.attn_span, self.attn_span - trim_len + 64)\n        else:\n            return self.attn_span\n\n    def get_loss(self):\n        \"\"\"\n        A loss term for regularizing the span length\n        \"\"\"\n        return self.loss_coeff * self.attn_span * self.current_val.mean()\n\n    def forward(self, attn):\n        attn = self.mask_forward(attn)\n        attn = attn / (attn.sum(-1, keepdim=True) + 1e-8)\n        return attn";
+                var nbb_formatted_code = "# export\n\n\nclass AdaptiveSpan(nn.Module):\n    \"\"\"\n    Implements `Adaptive Attention Span in Transformers`\n                [Paper](https://arxiv.org/abs/1905.07799)\n\n    Arguments:\n        attn_span (int): specifies the maximum attention span\n        adapt_span_loss_coeff (float): regulates the initial value of\n                                        adapt_span_loss\n        adapt_span_ramp (int): offset value\n        adapt_span_init (float): initial additive value for the\n                                 main parameter\n        adapt_span_cache (bool): determines working of caching\n        nb_heads (int): number of attention heads\n        bs (int): batch size\n        mask_size (list): a list containing last dimension of possible\n                        attention scores\n\n    Example::\n        >>> config = {'attn_span': 1024,\n                     'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,\n                     'adapt_span_init': 0.002, 'adapt_span_cache': True,\n                     'nb_heads': 12,'bs': 128, 'mask_size': [20,36]}\n        >>> adaptive_span = AdaptiveSpan(**config)\n        >>> adaptive_span(torch.randn(128,12,26,36)).shape\n        >>> adaptive_span(torch.randn(128,12,26,20)).shape\n        >>> adaptive_span.get_current_avg_span()\n        >>> adaptive_span.get_current_max_span()\n        >>> adaptive_span.get_trim_len()\n        >>> adaptive_span.clamp_param()\n    \"\"\"\n\n    def __init__(\n        self,\n        attn_span,\n        adapt_span_loss_coeff,\n        adapt_span_ramp,\n        adapt_span_init,\n        adapt_span_cache,\n        nb_heads,\n        bs,\n        mask_size,\n    ):\n\n        super(AdaptiveSpan, self).__init__()\n        self.attn_span = attn_span  # [attn_span]\n        self.ramp_size = adapt_span_ramp\n        self.bs = bs\n        self.nb_heads = nb_heads\n        self.init_val = adapt_span_init\n        self.adapt_cache = adapt_span_cache\n        self.loss_coeff = adapt_span_loss_coeff\n        self.shape = (self.bs, self.nb_heads, 1, 1)\n\n        self.current_val = nn.Parameter(\n            torch.nn.init.kaiming_normal_(torch.empty(*self.shape)) + self.init_val\n        )  # [bs,nb_heads,1,1]\n        self.mask_size = mask_size\n\n        mask_template_0 = torch.linspace(\n            1 - self.mask_size[0], 0, steps=self.mask_size[0]\n        )  # [attn_span]\n        self.register_buffer(\"mask_template_0\", mask_template_0)\n\n        if len(self.mask_size) > 1:\n            mask_template_1 = torch.linspace(\n                1 - self.mask_size[1], 0, steps=self.mask_size[1]\n            )\n            self.register_buffer(\"mask_template_1\", mask_template_1)\n\n    def mask_forward(self, x):\n        \"\"\"\n        Computes the mask and performs the multiplication operation\n        with attention weights\n        \"\"\"\n        mask_size = x.size(3)\n        if mask_size == self.mask_size[0]:\n            mask = self.mask_template_0 + self.current_val * mask_size\n        else:\n            mask = self.mask_template_1 + self.current_val * mask_size\n        mask = mask / self.ramp_size + 1\n        mask = mask.clamp(0, 1)\n        if x.size(0) == mask.size(0):\n            x = x * mask  # [bs, nb_heads, 36, 64]) [bs, nb_heads, 1, 64]\n            return x\n        else:\n            return x\n\n    def get_current_avg_span(self, include_ramp=True):\n        \"\"\"\n        Outputs average span\n        \"\"\"\n        current_size = math.ceil(self.current_val.mean().item() * self.attn_span)\n        if include_ramp:\n            current_size += self.ramp_size\n        current_size = max(0, min(self.attn_span, current_size))\n        return current_size\n\n    def get_current_max_span(self, include_ramp=True):\n        \"\"\"\n        Determines maximum span\n        \"\"\"\n        current_size = math.ceil(self.current_val.max().item() * self.attn_span)\n        if include_ramp:\n            current_size += self.ramp_size\n        current_size = max(0, min(self.attn_span, current_size))\n        return current_size\n\n    def clamp_param(self):\n        \"\"\"\n        Clamps the values of parameter to stay between 0 and 1\n        \"\"\"\n        self.current_val.data.clamp_(0, 1)\n\n    def get_trim_len(self):\n        \"\"\"\n        Outputs length to be trimmed\n        \"\"\"\n        L = self.attn_span\n        trim_len = min(L - 1, L - self.get_current_max_span())\n        trim_len = math.floor(trim_len / 64) * 64\n        return trim_len\n\n    def get_cache_size(self):\n        \"\"\"\n        Determine how long the cache should be\n        \"\"\"\n        if self.adapt_cache:\n            trim_len = self.get_trim_len()\n            return min(self.attn_span, self.attn_span - trim_len + 64)\n        else:\n            return self.attn_span\n\n    def get_loss(self):\n        \"\"\"\n        A loss term for regularizing the span length\n        \"\"\"\n        return self.loss_coeff * self.attn_span * self.current_val.mean()\n\n    def forward(self, attn):\n        attn = self.mask_forward(attn)\n        attn = attn / (attn.sum(-1, keepdim=True) + 1e-8)\n        return attn";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -40,22 +126,26 @@ summary: "Implements Adaptive Attention Span"
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="AdaptiveSpan" class="doc_header"><code>class</code> <code>AdaptiveSpan</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/adaptive_span.py#L13" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AdaptiveSpan</code>(<strong><code>attn_span</code></strong>, <strong><code>adapt_span_loss_coeff</code></strong>, <strong><code>adapt_span_ramp</code></strong>, <strong><code>adapt_span_init</code></strong>, <strong><code>adapt_span_cache</code></strong>, <strong><code>nb_heads</code></strong>, <strong><code>bs</code></strong>, <strong><code>mask_size</code></strong>) :: <code>Module</code></p>
 </blockquote>
-<p>Implements <code>Adaptive Attention Span in Transformers</code> <a href="https://arxiv.org/abs/1905.07799">Paper</a></p>
+<p>Implements <code>Adaptive Attention Span in Transformers</code>
+            <a href="https://arxiv.org/abs/1905.07799">Paper</a></p>
 <p>Arguments:
     attn_span (int): specifies the maximum attention span
-    adapt_span_loss_coeff (float): regulates the initial value of adapt_span_loss
+    adapt_span_loss_coeff (float): regulates the initial value of
+                                    adapt_span_loss
     adapt_span_ramp (int): offset value
     adapt_span_init (float): initial additive value for the
                              main parameter
     adapt_span_cache (bool): determines working of caching
     nb_heads (int): number of attention heads
     bs (int): batch size
-    mask_size (list): a list containing last dimension of possible attention scores</p>
+    mask_size (list): a list containing last dimension of possible
+                    attention scores</p>
 <p>Example::</p>
 
-<pre><code>&gt;&gt;&gt; config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005,
-              'adapt_span_ramp': 32, 'adapt_span_init': 0.002, 'adapt_span_cache': True,
-              'nb_heads': 12,'bs': 128, 'mask_size': [20,36]}
+<pre><code>&gt;&gt;&gt; config = {'attn_span': 1024,
+             'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
+             'adapt_span_init': 0.002, 'adapt_span_cache': True,
+             'nb_heads': 12,'bs': 128, 'mask_size': [20,36]}
 &gt;&gt;&gt; adaptive_span = AdaptiveSpan(**config)
 &gt;&gt;&gt; adaptive_span(torch.randn(128,12,26,36)).shape
 &gt;&gt;&gt; adaptive_span(torch.randn(128,12,26,20)).shape
@@ -72,55 +162,200 @@ summary: "Implements Adaptive Attention Span"
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+    {% endraw %}
 
-<pre><code>import torch
-from fluence.adaptive.adaptive_span import AdaptiveSpan
-config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
-                      'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,'bs': 128,
-                      'mask_size': [20,36]}
-adaptive_span = AdaptiveSpan(**config)
-adaptive_span.get_current_avg_span() # Returns average span
-adaptive_span.get_current_max_span() # Returns maximum span
-adaptive_span.get_trim_len() # Returns length that can be trimmed
-adaptive_span.clamp_param() # Clamps values of parameter to stay between [0,1]
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
-attention_scores_0 = torch.randn(128,12,26,36) # These scores come from softmax
-attention_scores_1 = torch.randn(128,12,26,20) # These scores come from softmax
-adaptive_span(attention_scores_0).shape # Soft masking function is multiplied
-adaptive_span(attention_scores_1).shape</code></pre>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;attn_span&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+    <span class="s2">&quot;adapt_span_loss_coeff&quot;</span><span class="p">:</span> <span class="mf">0.000005</span><span class="p">,</span>
+    <span class="s2">&quot;adapt_span_ramp&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>
+    <span class="s2">&quot;adapt_span_init&quot;</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">,</span>
+    <span class="s2">&quot;adapt_span_cache&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;nb_heads&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="s2">&quot;bs&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="s2">&quot;mask_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">36</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="cdc39698-0651-4ce0-9046-a60820559344"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#cdc39698-0651-4ce0-9046-a60820559344');
+
+            setTimeout(function() {
+                var nbb_cell_id = 13;
+                var nbb_unformatted_code = "config = {\n    \"attn_span\": 1024,\n    \"adapt_span_loss_coeff\": 0.000005,\n    \"adapt_span_ramp\": 32,\n    \"adapt_span_init\": 0.002,\n    \"adapt_span_cache\": True,\n    \"nb_heads\": 12,\n    \"bs\": 128,\n    \"mask_size\": [20, 36],\n}";
+                var nbb_formatted_code = "config = {\n    \"attn_span\": 1024,\n    \"adapt_span_loss_coeff\": 0.000005,\n    \"adapt_span_ramp\": 32,\n    \"adapt_span_init\": 0.002,\n    \"adapt_span_cache\": True,\n    \"nb_heads\": 12,\n    \"bs\": 128,\n    \"mask_size\": [20, 36],\n}";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Define the following in <strong>init</strong> of BertAttention</p>
-<ol>
-<li>Set it as an attribute
-<pre><code> if self.adapt_span_bool:
-     self.adaptive_span = AdaptiveSpan(**config)</code></pre>
-</li>
-<li>Use the adapt_span_loss with the current loss function
-<pre><code>adapt_span_loss = 0.
-for l in self.model.layer: # Should be a nn.ModuleList to iterate
-     adapt_span_loss += l.attention.adaptive_span.get_loss() #attention is the BertAttention class</code></pre>
-</li>
-<li>Perform clamping
-<pre><code>for l in self.model.layer:
-     l.attention.self.adaptive_span.clamp_param()</code></pre>
-</li>
-<li>Get attention span
-<pre><code>for layer_idx, i in enumerate(self.model.layer):
-     l = i.attention.adaptive_span.get_current_avg_span()</code></pre>
-</li>
-</ol>
 
-</div>
-</div>
 </div>
     {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">adaptive_span</span> <span class="o">=</span> <span class="n">AdaptiveSpan</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_current_avg_span</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_current_max_span</span><span class="p">())</span>
+<span class="n">adaptive_span</span><span class="o">.</span><span class="n">clamp_param</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="o">.</span><span class="n">get_trim_len</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>23
+1024
+0
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+
+<div id="ee00fd48-f533-41f7-b337-1342563d72a8"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#ee00fd48-f533-41f7-b337-1342563d72a8');
+
+            setTimeout(function() {
+                var nbb_cell_id = 11;
+                var nbb_unformatted_code = "adaptive_span = AdaptiveSpan(**config)\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\nadaptive_span.clamp_param()\nprint(adaptive_span.get_trim_len())";
+                var nbb_formatted_code = "adaptive_span = AdaptiveSpan(**config)\nprint(adaptive_span.get_current_avg_span())\nprint(adaptive_span.get_current_max_span())\nadaptive_span.clamp_param()\nprint(adaptive_span.get_trim_len())";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adaptive_span</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>torch.Size([128, 12, 26, 36])
+torch.Size([128, 12, 26, 20])
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+
+<div id="4ff30b18-453d-419b-acd4-60072573bd6c"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#4ff30b18-453d-419b-acd4-60072573bd6c');
+
+            setTimeout(function() {
+                var nbb_cell_id = 12;
+                var nbb_unformatted_code = "print(adaptive_span(torch.randn(128, 12, 26, 36)).shape)\nprint(adaptive_span(torch.randn(128, 12, 26, 20)).shape)";
+                var nbb_formatted_code = "print(adaptive_span(torch.randn(128, 12, 26, 36)).shape)\nprint(adaptive_span(torch.randn(128, 12, 26, 20)).shape)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

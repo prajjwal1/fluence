@@ -5,7 +5,8 @@ title: Fluence
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Fluence is a deep learning library based on Pytorch for attention based approaches."
+summary: "Fluence is a deep learning library based on Pytorch for attention based approaches. It's a toolkit which I use for my own research."
+description: "Fluence is a deep learning library based on Pytorch for attention based approaches. It's a toolkit which I use for my own research."
 ---
 <!--
 
@@ -18,11 +19,14 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 -->
 
 <div class="container" id="notebook-container">
-    {% raw %}
         
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="https://github.com/prajjwal1/fluence/workflows/CI/badge.svg" alt=""></p>
@@ -32,7 +36,7 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Installing">Installing<a class="anchor-link" href="#Installing">&#182;</a></h1>
+<h1 id="Installing">Installing<a class="anchor-link" href="#Installing"> </a></h1>
 </div>
 </div>
 </div>
@@ -50,7 +54,7 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 <li><a href="https://arxiv.org/abs/1905.07799">Adaptive Attention Span in Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.00015">Adaptively Sparse Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.11556">Reducing Transformer Depth on Demand with Structured Dropout</a></li>
-<li>Optimizers: Lamb, Lookahead</li>
+<li>Optimizers: Lamb, Lookahead (Pytorch doesn't have it)</li>
 </ul>
 
 </div>
@@ -58,27 +62,26 @@ summary: "Fluence is a deep learning library based on Pytorch for attention base
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure">&#182;</a></h1>
+<h1 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure"> </a></h1>
 <pre><code>fluence
     - adaptive     # Implements Adaptive Modules
     - models       # Models
-    - optimizers   # optimizers 
-    - tests        # Unit tests</code></pre>
+    - optimizers   # optimizers</code></pre>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Documentation">Documentation<a class="anchor-link" href="#Documentation">&#182;</a></h1><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow</p>
+<h1 id="Documentation">Documentation<a class="anchor-link" href="#Documentation"> </a></h1><p>Please head to this <a href="prajjwal1.github.io/fluence">link</a> to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Usage">Usage<a class="anchor-link" href="#Usage">&#182;</a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
-<h3 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span">&#182;</a></h3>
+<h2 id="Usage">Usage<a class="anchor-link" href="#Usage"> </a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
+<h3 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span"> </a></h3>
 <pre><code>import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
 config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp': 32,
@@ -100,7 +103,7 @@ adaptive_span(attention_scores_1).shape</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">Using Entmax as a replacement for softmax with learnable alpha values<a class="anchor-link" href="#Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">&#182;</a></h3>
+<h3 id="Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values">Using Entmax as a replacement for softmax with learnable alpha values<a class="anchor-link" href="#Using-Entmax-as-a-replacement-for-softmax-with-learnable-alpha-values"> </a></h3>
 </div>
 </div>
 </div>
@@ -117,7 +120,7 @@ attention_scores = entmax_alpha(att_scores=torch.rand(128,12,26,36))</code></pre
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Using-Layerdrop">Using Layerdrop<a class="anchor-link" href="#Using-Layerdrop">&#182;</a></h3>
+<h3 id="Using-Layerdrop">Using Layerdrop<a class="anchor-link" href="#Using-Layerdrop"> </a></h3>
 </div>
 </div>
 </div>
@@ -136,45 +139,7 @@ output = layerdrop(torch.rand(10,2))</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="fluence.models">fluence.models<a class="anchor-link" href="#fluence.models">&#182;</a></h3><p>Contains:</p>
-
-<pre><code>- LXMERT (Cross modal (vision and language) transformer) with adaptive capabilities as `fluence.adaptive`</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-<pre><code># Define a params file which contains configurations
-
-params = {'adapt_span_enabled': False, 'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 
-          'adapt_span_ramp': 32, 'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,
-          'bs': 128, 'mask_size': [20,36], 'sparse_enabled': True, 'num_attention_heads': 4, 
-          'layer_sizes': {'lang':9,'cross':5,'vision':5}, 'from_scratch': False, 
-          'layerdrop_enabled': False, 'layerdrop_num_layers': 1, 'max_seq_len': 20}
-
-# Right now, LXMERT requires features directly and not images
-
-feat = torch.rand(128,36,2048)
-# Pos is the ROI Features coming from detector (e.g Faster RCNN)
-
-pos = torch.rand(128,36,4)
-# Questions associated with images
-
-ques = ['Are there any people in this photo?']*128
-
-# Define how many answers are there in the dataset
-
-model = LXMERT_Adaptive(3129, params)
-logits = model(feat, pos, ques)</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="fluence.optimizer">fluence.optimizer<a class="anchor-link" href="#fluence.optimizer">&#182;</a></h3>
+<h3 id="fluence.optimizer">fluence.optimizer<a class="anchor-link" href="#fluence.optimizer"> </a></h3>
 <pre><code>from fluence.optimizers.lamb import Lamb
 from fluence.optimizers.lookahead import Lookahead
 
@@ -187,7 +152,7 @@ optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Acknowledgements">Acknowledgements<a class="anchor-link" href="#Acknowledgements">&#182;</a></h4><ul>
+<h4 id="Acknowledgements">Acknowledgements<a class="anchor-link" href="#Acknowledgements"> </a></h4><ul>
 <li><a href="https://github.com/huggingface/transformers/">Hugging face Transformer</a></li>
 <li><a href="https://github.com/facebookresearch/adaptive-span">Adaptive Attention Span for Transformers</a></li>
 <li><a href="https://github.com/deep-spin/entmax">entmax</a></li>
@@ -204,7 +169,6 @@ optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)</code></pre>
 </div>
 </div>
 </div>
-    {% endraw %}
 </div>
  
 

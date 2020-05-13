@@ -1,14 +1,18 @@
 # Fluence
-> Fluence is a deep learning library for transformers + self attention methods.
+> Fluence is a deep learning library based on Pytorch for attention based approaches. It's a toolkit which I use for my own research.
 
 
 ![](https://github.com/prajjwal1/fluence/workflows/CI/badge.svg)
+
+# Installing
+
+`pip install fluence`
 
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
 - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
 - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
-- Optimizers: Lamb, Lookahead
+- Optimizers: Lamb, Lookahead (Pytorch doesn't have it)
 
 # Code Structure
 ```
@@ -16,14 +20,13 @@ fluence
     - adaptive     # Implements Adaptive Modules
     - models       # Models
     - optimizers   # optimizers 
-    - tests        # Unit tests
 ```
 
 # Documentation 
-Please head to this [link](prajjwal1.github.io/fluence) to learn how you can integrate fluence with your workflow
+Please head to this [link](prajjwal1.github.io/fluence) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
 
 ## Usage
-Right now, it consists of major adaptive computation approaches which have been tested with transformers. Here are some of the examples
+Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples
 
 
 ### Using Adaptive Attention Span
@@ -63,36 +66,6 @@ net = nn.ModuleList([nn.Linear(2, 2) for i in range(3)])
 layers_to_drop = 2
 layerdrop = LayerDrop(net, layers_to_drop)
 output = layerdrop(torch.rand(10,2))
-```
-
-### fluence.models
-Contains:
-    - LXMERT (Cross modal (vision and language) transformer) with adaptive capabilities as `fluence.adaptive`
-
-
-```
-# Define a params file which contains configurations
-
-params = {'adapt_span_enabled': False, 'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 
-          'adapt_span_ramp': 32, 'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,
-          'bs': 128, 'mask_size': [20,36], 'sparse_enabled': True, 'num_attention_heads': 4, 
-          'layer_sizes': {'lang':9,'cross':5,'vision':5}, 'from_scratch': False, 
-          'layerdrop_enabled': False, 'layerdrop_num_layers': 1, 'max_seq_len': 20}
-
-# Right now, LXMERT requires features directly and not images
-
-feat = torch.rand(128,36,2048)
-# Pos is the ROI Features coming from detector (e.g Faster RCNN)
-
-pos = torch.rand(128,36,4)
-# Questions associated with images
-
-ques = ['Are there any people in this photo?']*128
-
-# Define how many answers are there in the dataset
-
-model = LXMERT_Adaptive(3129, params)
-logits = model(feat, pos, ques)
 ```
 
 ### fluence.optimizer

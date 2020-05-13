@@ -6,6 +6,7 @@ keywords: fastai
 sidebar: home_sidebar
 
 summary: "Entmax as a replacement for softmax to get sparse attention weights"
+description: "Entmax as a replacement for softmax to get sparse attention weights"
 ---
 <!--
 
@@ -18,17 +19,102 @@ summary: "Entmax as a replacement for softmax to get sparse attention weights"
 -->
 
 <div class="container" id="notebook-container">
-    {% raw %}
         
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="d2073c35-c3c4-412b-8b65-edb65b016718"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#d2073c35-c3c4-412b-8b65-edb65b016718');
+
+            setTimeout(function() {
+                var nbb_cell_id = 2;
+                var nbb_unformatted_code = "# export\n# Implementation of Entmax Bisect functions has been adapted from\n# https://github.com/deep-spin/entmax/\nimport torch\nfrom torch import nn\nfrom torch.autograd import Function";
+                var nbb_formatted_code = "# export\n# Implementation of Entmax Bisect functions has been adapted from\n# https://github.com/deep-spin/entmax/\nimport torch\nfrom torch import nn\nfrom torch.autograd import Function";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="e06bf01a-a012-49e4-8a56-deb312f78605"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#e06bf01a-a012-49e4-8a56-deb312f78605');
+
+            setTimeout(function() {
+                var nbb_cell_id = 3;
+                var nbb_unformatted_code = "# export\n\n\nclass AlphaChooser(torch.nn.Module):\n\n    def __init__(self, head_count):\n        super(AlphaChooser, self).__init__()\n        self.pre_alpha = nn.Parameter(torch.randn(head_count))\n\n    def forward(self):\n        alpha = 1 + torch.sigmoid(self.pre_alpha)\n        return torch.clamp(alpha, min=1.01, max=2)\n\n\nclass EntmaxAlpha(nn.Module):\n\n    def __init__(self, head_count, dim=0):\n        super(EntmaxAlpha, self).__init__()\n        self.dim = dim\n        self.alpha_chooser = nn.Parameter(AlphaChooser(head_count)())\n        self.alpha = self.alpha_chooser\n\n    def forward(self, att_scores):\n        batch_size, head_count, query_len, key_len = att_scores.size()\n\n        expanded_alpha = self.alpha.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)\n        # [1,nb_heads,1,1]\n        expanded_alpha = expanded_alpha.expand((batch_size, -1, query_len, 1))\n        # [bs, nb_heads, query_len,1]\n        p_star = entmax_bisect(att_scores, expanded_alpha)\n        return p_star\n\n\nclass EntmaxBisectFunction(Function):\n    @classmethod\n    def _gp(cls, x, alpha):\n        return x ** (alpha - 1)\n\n    @classmethod\n    def _gp_inv(cls, y, alpha):\n        return y ** (1 / (alpha - 1))\n\n    @classmethod\n    def _p(cls, X, alpha):\n        return cls._gp_inv(torch.clamp(X, min=0), alpha)\n\n    @classmethod\n    def forward(cls,\n                ctx,\n                X,\n                alpha=1.5,\n                dim=-1,\n                n_iter=50,\n                ensure_sum_one=True):\n\n        if not isinstance(alpha, torch.Tensor):\n            alpha = torch.tensor(alpha, dtype=X.dtype, device=X.device)\n\n        alpha_shape = list(X.shape)\n        alpha_shape[dim] = 1\n        alpha = alpha.expand(*alpha_shape)\n\n        ctx.alpha = alpha\n        ctx.dim = dim\n        d = X.shape[dim]\n\n        X = X * (alpha - 1)\n\n        max_val, _ = X.max(dim=dim, keepdim=True)\n\n        tau_lo = max_val - cls._gp(1, alpha)\n        tau_hi = max_val - cls._gp(1 / d, alpha)\n\n        f_lo = cls._p(X - tau_lo, alpha).sum(dim) - 1\n\n        dm = tau_hi - tau_lo\n\n        for it in range(n_iter):\n\n            dm /= 2\n            tau_m = tau_lo + dm\n            p_m = cls._p(X - tau_m, alpha)\n            f_m = p_m.sum(dim) - 1\n\n            mask = (f_m * f_lo >= 0).unsqueeze(dim)\n            tau_lo = torch.where(mask, tau_m, tau_lo)\n\n        if ensure_sum_one:\n            p_m /= p_m.sum(dim=dim).unsqueeze(dim=dim)\n\n        ctx.save_for_backward(p_m)\n\n        return p_m\n\n    @classmethod\n    def backward(cls, ctx, dY):\n        Y, = ctx.saved_tensors\n\n        gppr = torch.where(Y > 0, Y ** (2 - ctx.alpha), Y.new_zeros(1))\n\n        dX = dY * gppr\n        q = dX.sum(ctx.dim) / gppr.sum(ctx.dim)\n        q = q.unsqueeze(ctx.dim)\n        dX -= q * gppr\n\n        d_alpha = None\n        if ctx.needs_input_grad[1]:\n\n            # alpha gradient computation\n            # d_alpha = (partial_y / partial_alpha) * dY\n            # NOTE: ensure alpha is not close to 1\n            # since there is an indetermination\n            # batch_size, _ = dY.shape\n\n            # shannon terms\n            S = torch.where(Y > 0, Y * torch.log(Y), Y.new_zeros(1))\n            # shannon entropy\n            ent = S.sum(ctx.dim).unsqueeze(ctx.dim)\n            Y_skewed = gppr / gppr.sum(ctx.dim).unsqueeze(ctx.dim)\n\n            d_alpha = dY * (Y - Y_skewed) / ((ctx.alpha - 1) ** 2)\n            d_alpha -= dY * (S - Y_skewed * ent) / (ctx.alpha - 1)\n            d_alpha = d_alpha.sum(ctx.dim).unsqueeze(ctx.dim)\n\n        return dX, d_alpha, None, None, None\n\n\ndef entmax_bisect(X, alpha=1.5, dim=-1, n_iter=50, ensure_sum_one=True):\n    \"\"\"alpha-entmax: normalizing sparse transform (a la softmax).\n    Solves the optimization problem:\n        max_p <x, p> - H_a(p)    s.t.    p >= 0, sum(p) == 1.\n    where H_a(p) is the Tsallis alpha-entropy with custom alpha >= 1,\n    using a bisection (root finding, binary search) algorithm.\n    This function is differentiable with respect to both X and alpha.\n    Parameters\n    ----------\n    X : torch.Tensor\n        The input tensor.\n    alpha : float or torch.Tensor\n        Tensor of alpha parameters (> 1) to use. If scalar\n        or python float, the same value is used for all rows, otherwise,\n        it must have shape (or be expandable to)\n        alpha.shape[j] == (X.shape[j] if j != dim else 1)\n        A value of alpha=2 corresponds to sparsemax, and alpha=1 corresponds to\n        softmax (but computing it this way is likely unstable).\n    dim : int\n        The dimension along which to apply alpha-entmax.\n    n_iter : int\n        Number of bisection iterations. For float32, 24 iterations should\n        suffice for machine precision.\n    ensure_sum_one : bool,\n        Whether to divide the result by its sum. If false, the result might\n        sum to close but not exactly 1, which might cause downstream problems.\n    Returns\n    -------\n    P : torch tensor, same shape as X\n        The projection result, such that P.sum(dim=dim) == 1 elementwise.\n    \"\"\"\n    return EntmaxBisectFunction.apply(X, alpha, dim, n_iter, ensure_sum_one)";
+                var nbb_formatted_code = "# export\n\n\nclass AlphaChooser(torch.nn.Module):\n    def __init__(self, head_count):\n        super(AlphaChooser, self).__init__()\n        self.pre_alpha = nn.Parameter(torch.randn(head_count))\n\n    def forward(self):\n        alpha = 1 + torch.sigmoid(self.pre_alpha)\n        return torch.clamp(alpha, min=1.01, max=2)\n\n\nclass EntmaxAlpha(nn.Module):\n    def __init__(self, head_count, dim=0):\n        super(EntmaxAlpha, self).__init__()\n        self.dim = dim\n        self.alpha_chooser = nn.Parameter(AlphaChooser(head_count)())\n        self.alpha = self.alpha_chooser\n\n    def forward(self, att_scores):\n        batch_size, head_count, query_len, key_len = att_scores.size()\n\n        expanded_alpha = self.alpha.unsqueeze(0).unsqueeze(-1).unsqueeze(-1)\n        # [1,nb_heads,1,1]\n        expanded_alpha = expanded_alpha.expand((batch_size, -1, query_len, 1))\n        # [bs, nb_heads, query_len,1]\n        p_star = entmax_bisect(att_scores, expanded_alpha)\n        return p_star\n\n\nclass EntmaxBisectFunction(Function):\n    @classmethod\n    def _gp(cls, x, alpha):\n        return x ** (alpha - 1)\n\n    @classmethod\n    def _gp_inv(cls, y, alpha):\n        return y ** (1 / (alpha - 1))\n\n    @classmethod\n    def _p(cls, X, alpha):\n        return cls._gp_inv(torch.clamp(X, min=0), alpha)\n\n    @classmethod\n    def forward(cls, ctx, X, alpha=1.5, dim=-1, n_iter=50, ensure_sum_one=True):\n\n        if not isinstance(alpha, torch.Tensor):\n            alpha = torch.tensor(alpha, dtype=X.dtype, device=X.device)\n\n        alpha_shape = list(X.shape)\n        alpha_shape[dim] = 1\n        alpha = alpha.expand(*alpha_shape)\n\n        ctx.alpha = alpha\n        ctx.dim = dim\n        d = X.shape[dim]\n\n        X = X * (alpha - 1)\n\n        max_val, _ = X.max(dim=dim, keepdim=True)\n\n        tau_lo = max_val - cls._gp(1, alpha)\n        tau_hi = max_val - cls._gp(1 / d, alpha)\n\n        f_lo = cls._p(X - tau_lo, alpha).sum(dim) - 1\n\n        dm = tau_hi - tau_lo\n\n        for it in range(n_iter):\n\n            dm /= 2\n            tau_m = tau_lo + dm\n            p_m = cls._p(X - tau_m, alpha)\n            f_m = p_m.sum(dim) - 1\n\n            mask = (f_m * f_lo >= 0).unsqueeze(dim)\n            tau_lo = torch.where(mask, tau_m, tau_lo)\n\n        if ensure_sum_one:\n            p_m /= p_m.sum(dim=dim).unsqueeze(dim=dim)\n\n        ctx.save_for_backward(p_m)\n\n        return p_m\n\n    @classmethod\n    def backward(cls, ctx, dY):\n        (Y,) = ctx.saved_tensors\n\n        gppr = torch.where(Y > 0, Y ** (2 - ctx.alpha), Y.new_zeros(1))\n\n        dX = dY * gppr\n        q = dX.sum(ctx.dim) / gppr.sum(ctx.dim)\n        q = q.unsqueeze(ctx.dim)\n        dX -= q * gppr\n\n        d_alpha = None\n        if ctx.needs_input_grad[1]:\n\n            # alpha gradient computation\n            # d_alpha = (partial_y / partial_alpha) * dY\n            # NOTE: ensure alpha is not close to 1\n            # since there is an indetermination\n            # batch_size, _ = dY.shape\n\n            # shannon terms\n            S = torch.where(Y > 0, Y * torch.log(Y), Y.new_zeros(1))\n            # shannon entropy\n            ent = S.sum(ctx.dim).unsqueeze(ctx.dim)\n            Y_skewed = gppr / gppr.sum(ctx.dim).unsqueeze(ctx.dim)\n\n            d_alpha = dY * (Y - Y_skewed) / ((ctx.alpha - 1) ** 2)\n            d_alpha -= dY * (S - Y_skewed * ent) / (ctx.alpha - 1)\n            d_alpha = d_alpha.sum(ctx.dim).unsqueeze(ctx.dim)\n\n        return dX, d_alpha, None, None, None\n\n\ndef entmax_bisect(X, alpha=1.5, dim=-1, n_iter=50, ensure_sum_one=True):\n    \"\"\"alpha-entmax: normalizing sparse transform (a la softmax).\n    Solves the optimization problem:\n        max_p <x, p> - H_a(p)    s.t.    p >= 0, sum(p) == 1.\n    where H_a(p) is the Tsallis alpha-entropy with custom alpha >= 1,\n    using a bisection (root finding, binary search) algorithm.\n    This function is differentiable with respect to both X and alpha.\n    Parameters\n    ----------\n    X : torch.Tensor\n        The input tensor.\n    alpha : float or torch.Tensor\n        Tensor of alpha parameters (> 1) to use. If scalar\n        or python float, the same value is used for all rows, otherwise,\n        it must have shape (or be expandable to)\n        alpha.shape[j] == (X.shape[j] if j != dim else 1)\n        A value of alpha=2 corresponds to sparsemax, and alpha=1 corresponds to\n        softmax (but computing it this way is likely unstable).\n    dim : int\n        The dimension along which to apply alpha-entmax.\n    n_iter : int\n        Number of bisection iterations. For float32, 24 iterations should\n        suffice for machine precision.\n    ensure_sum_one : bool,\n        Whether to divide the result by its sum. If false, the result might\n        sum to close but not exactly 1, which might cause downstream problems.\n    Returns\n    -------\n    P : torch tensor, same shape as X\n        The projection result, such that P.sum(dim=dim) == 1 elementwise.\n    \"\"\"\n    return EntmaxBisectFunction.apply(X, alpha, dim, n_iter, ensure_sum_one)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -38,7 +124,7 @@ summary: "Entmax as a replacement for softmax to get sparse attention weights"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="AlphaChooser" class="doc_header"><code>class</code> <code>AlphaChooser</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L12" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AlphaChooser</code>(<strong><code>head_count</code></strong>) :: <code>Module</code></p>
+<h2 id="AlphaChooser" class="doc_header"><code>class</code> <code>AlphaChooser</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>AlphaChooser</code>(<strong><code>head_count</code></strong>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -70,6 +156,10 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 </div>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -79,7 +169,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EntmaxAlpha" class="doc_header"><code>class</code> <code>EntmaxAlpha</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxAlpha</code>(<strong><code>head_count</code></strong>, <strong><code>dim</code></strong>=<em><code>0</code></em>) :: <code>Module</code></p>
+<h2 id="EntmaxAlpha" class="doc_header"><code>class</code> <code>EntmaxAlpha</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L26" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxAlpha</code>(<strong><code>head_count</code></strong>, <strong><code>dim</code></strong>=<em><code>0</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -111,6 +201,10 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 </div>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -120,7 +214,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="EntmaxBisectFunction" class="doc_header"><code>class</code> <code>EntmaxBisectFunction</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L38" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxBisectFunction</code>() :: <code>Function</code></p>
+<h2 id="EntmaxBisectFunction" class="doc_header"><code>class</code> <code>EntmaxBisectFunction</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L45" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>EntmaxBisectFunction</code>() :: <code>Function</code></p>
 </blockquote>
 <p>Records operation history and defines formulas for differentiating ops.</p>
 <p>Every operation performed on :class:<code>Tensor</code> s creates a new function
@@ -133,7 +227,6 @@ returned gradients on to next :class:<code>Function</code> s.</p>
 <p>Normally, the only way users interact with functions is by creating
 subclasses and defining new operations. This is a recommended way of
 extending torch.autograd.</p>
-<p>Each function object is meant to be used only once (in the forward pass).</p>
 <p>Examples::</p>
 
 <pre><code>&gt;&gt;&gt; class Exp(Function):
@@ -147,7 +240,10 @@ extending torch.autograd.</p>
 &gt;&gt;&gt;     @staticmethod
 &gt;&gt;&gt;     def backward(ctx, grad_output):
 &gt;&gt;&gt;         result, = ctx.saved_tensors
-&gt;&gt;&gt;         return grad_output * result</code></pre>
+&gt;&gt;&gt;         return grad_output * result
+&gt;&gt;&gt;
+&gt;&gt;&gt; #Use it by calling the apply method:
+&gt;&gt;&gt; output = Exp.apply(input)</code></pre>
 
 </div>
 
@@ -157,6 +253,10 @@ extending torch.autograd.</p>
 </div>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
@@ -166,7 +266,7 @@ extending torch.autograd.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="entmax_bisect" class="doc_header"><code>entmax_bisect</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L125" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>entmax_bisect</code>(<strong><code>X</code></strong>, <strong><code>alpha</code></strong>=<em><code>1.5</code></em>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n_iter</code></strong>=<em><code>50</code></em>, <strong><code>ensure_sum_one</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="entmax_bisect" class="doc_header"><code>entmax_bisect</code><a href="https://github.com/prajjwal1/fluence/tree/master/fluence/adaptive/entmax.py#L139" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>entmax_bisect</code>(<strong><code>X</code></strong>, <strong><code>alpha</code></strong>=<em><code>1.5</code></em>, <strong><code>dim</code></strong>=<em><code>-1</code></em>, <strong><code>n_iter</code></strong>=<em><code>50</code></em>, <strong><code>ensure_sum_one</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>alpha-entmax: normalizing sparse transform (a la softmax).
 Solves the optimization problem:
@@ -174,7 +274,7 @@ Solves the optimization problem:
 where H_a(p) is the Tsallis alpha-entropy with custom alpha &gt;= 1,
 using a bisection (root finding, binary search) algorithm.
 This function is differentiable with respect to both X and alpha.</p>
-<h2 id="Parameters">Parameters<a class="anchor-link" href="#Parameters">&#182;</a></h2><p>X : torch.Tensor
+<h2 id="Parameters">Parameters<a class="anchor-link" href="#Parameters"> </a></h2><p>X : torch.Tensor
     The input tensor.
 alpha : float or torch.Tensor
     Tensor of alpha parameters (&gt; 1) to use. If scalar
@@ -191,7 +291,7 @@ n_iter : int
 ensure_sum_one : bool,
     Whether to divide the result by its sum. If false, the result might
     sum to close but not exactly 1, which might cause downstream problems.</p>
-<h2 id="Returns">Returns<a class="anchor-link" href="#Returns">&#182;</a></h2><p>P : torch tensor, same shape as X
+<h2 id="Returns">Returns<a class="anchor-link" href="#Returns"> </a></h2><p>P : torch tensor, same shape as X
     The projection result, such that P.sum(dim=dim) == 1 elementwise.</p>
 
 </div>
@@ -202,6 +302,10 @@ ensure_sum_one : bool,
 </div>
 
 </div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
@@ -214,7 +318,47 @@ ensure_sum_one : bool,
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="6668a063-9fb0-404a-9ce5-eeece47b83b5"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#6668a063-9fb0-404a-9ce5-eeece47b83b5');
+
+            setTimeout(function() {
+                var nbb_cell_id = 4;
+                var nbb_unformatted_code = "num_attention_heads = 12";
+                var nbb_formatted_code = "num_attention_heads = 12";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
 </div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
@@ -227,34 +371,152 @@ ensure_sum_one : bool,
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="485e8846-b7b7-4c65-ac7e-12601ec51545"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#485e8846-b7b7-4c65-ac7e-12601ec51545');
+
+            setTimeout(function() {
+                var nbb_cell_id = 5;
+                var nbb_unformatted_code = "entmax_alpha = EntmaxAlpha(num_attention_heads)";
+                var nbb_formatted_code = "entmax_alpha = EntmaxAlpha(num_attention_heads)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">attention_scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">36</span><span class="p">)</span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">attention_scores</span> <span class="o">=</span> <span class="n">entmax_alpha</span><span class="p">(</span><span class="n">attention_scores</span><span class="p">)</span> <span class="c1"># This is meant to be replaced with softmax</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
 </div>
     {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">attention_scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="b9a916cc-60f9-4ebe-aee0-eca8e89bfc17"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#b9a916cc-60f9-4ebe-aee0-eca8e89bfc17');
+
+            setTimeout(function() {
+                var nbb_cell_id = 8;
+                var nbb_unformatted_code = "attention_scores = torch.rand(128, 12, 26, 36)";
+                var nbb_formatted_code = "attention_scores = torch.rand(128, 12, 26, 36)";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">attention_scores</span> <span class="o">=</span> <span class="n">entmax_alpha</span><span class="p">(</span><span class="n">attention_scores</span><span class="p">)</span>
+<span class="c1"># This is meant to be replaced with softmax</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+
+<div id="d212dc8a-114d-4301-8599-7b1600d9f978"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#d212dc8a-114d-4301-8599-7b1600d9f978');
+
+            setTimeout(function() {
+                var nbb_cell_id = 7;
+                var nbb_unformatted_code = "attention_scores = entmax_alpha(attention_scores)\n# This is meant to be replaced with softmax";
+                var nbb_formatted_code = "attention_scores = entmax_alpha(attention_scores)\n# This is meant to be replaced with softmax";
+                var nbb_cells = Jupyter.notebook.get_cells();
+                for (var i = 0; i < nbb_cells.length; ++i) {
+                    if (nbb_cells[i].input_prompt_number == nbb_cell_id) {
+                        if (nbb_cells[i].get_text() == nbb_unformatted_code) {
+                             nbb_cells[i].set_text(nbb_formatted_code);
+                        }
+                        break;
+                    }
+                }
+            }, 500);
+            
+</script>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 
