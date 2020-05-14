@@ -69,10 +69,10 @@ layerdrop = Layerdrop(net, layers_to_drop)
 output = layerdrop(torch.rand(10,2))
 ```
 
-### fluence.optimizer
+### fluence.optim
 ```
-from fluence.optimizers.lamb import Lamb
-from fluence.optimizers.lookahead import Lookahead
+from fluence.optim.lamb import Lamb
+from fluence.optim.lookahead import Lookahead
 
 model = torchvision.models.AlexNet()                        # Can be a transformer
 base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)

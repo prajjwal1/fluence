@@ -140,9 +140,9 @@ output = layerdrop(torch.rand(10,2))</code></pre>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="fluence.optimizer">fluence.optimizer<a class="anchor-link" href="#fluence.optimizer"> </a></h3>
-<pre><code>from fluence.optimizers.lamb import Lamb
-from fluence.optimizers.lookahead import Lookahead
+<h3 id="fluence.optim">fluence.optim<a class="anchor-link" href="#fluence.optim"> </a></h3>
+<pre><code>from fluence.optim.lamb import Lamb
+from fluence.optim.lookahead import Lookahead
 
 model = torchvision.models.AlexNet()                        # Can be a transformer
 base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
