@@ -10,16 +10,16 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: fluence.adaptive.entmax
+      title: entmax
       url: /adaptive.entmax
     - output: web,pdf
-      title: fluence.nn.layerdrop
+      title: layerdrop
       url: /adaptive.layerdrop
     - output: web,pdf
       title: fluence.adaptive.adaptive_span
       url: /adaptive.span
     - output: web,pdf
-      title: fluence.optim.lamb
+      title: lamb optimizer
       url: /optim.lamb
     - output: web,pdf
       title: Lookahead Optimizer

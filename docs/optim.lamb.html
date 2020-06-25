@@ -1,6 +1,6 @@
 ---
 
-title: fluence.optim.lamb
+title: lamb optimizer
 
 keywords: fastai
 sidebar: home_sidebar
@@ -76,45 +76,6 @@ Arguments:
 
 </div>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test_lamb</span><span class="p">():</span>
-    <span class="kn">import</span> <span class="nn">torchvision</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">torchvision</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">AlexNet</span><span class="p">()</span>
-    <span class="n">optim</span> <span class="o">=</span> <span class="n">Lamb</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span>
-    <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_lamb</span><span class="p">()</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
