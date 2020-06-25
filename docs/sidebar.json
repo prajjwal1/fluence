@@ -2,6 +2,7 @@
   "fluence": {
     "Overview": "/",
     "fluence.adaptive.adaptive_span": "/adaptive_span",
+    "sampling with clustering": "/clustering",
     "fluence.adaptive.entmax": "/entmax",
     "fluence.optim.lamb": "/lamb",
     "fluence.nn.layerdrop": "/layerdrop",

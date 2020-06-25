@@ -5,8 +5,8 @@ title: Fluence
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Fluence is a deep learning library based on Pytorch for attention based approaches. It's a toolkit which I use for my own research."
-description: "Fluence is a deep learning library based on Pytorch for attention based approaches. It's a toolkit which I use for my own research."
+summary: "Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms. Although the main focus is to provide support with transformers, it can be extended with other architectures as well."
+description: "Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms. Although the main focus is to provide support with transformers, it can be extended with other architectures as well."
 ---
 <!--
 
@@ -52,22 +52,25 @@ description: "Fluence is a deep learning library based on Pytorch for attention 
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The library contains implementation for the following approaches (many more to come):</p>
 <ul>
+<li><p>Adaptive Methods</p>
+<ul>
 <li><a href="https://arxiv.org/abs/1905.07799">Adaptive Attention Span in Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.00015">Adaptively Sparse Transformers</a></li>
 <li><a href="https://arxiv.org/abs/1909.11556">Reducing Transformer Depth on Demand with Structured Dropout</a></li>
-<li>Optimizers: Lamb, Lookahead (Pytorch doesn't have it)</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Code-Structure">Code Structure<a class="anchor-link" href="#Code-Structure"> </a></h1>
-<pre><code>fluence
-    - adaptive     # Implements Adaptive Modules
-    - models       # Models
-    - optimizers   # optimizers</code></pre>
+</li>
+<li><p>Optimizers:</p>
+<ul>
+<li>Lamb</li>
+<li>Lookahead</li>
+</ul>
+</li>
+<li><p>Importance Sampling:</p>
+<ul>
+<li>Clustering</li>
+</ul>
+</li>
+</ul>
 
 </div>
 </div>
@@ -81,7 +84,7 @@ description: "Fluence is a deep learning library based on Pytorch for attention 
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Usage">Usage<a class="anchor-link" href="#Usage"> </a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
+<h2 id="Minimal-Examples">Minimal Examples<a class="anchor-link" href="#Minimal-Examples"> </a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
 <h3 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span"> </a></h3>
 <pre><code>import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
@@ -89,10 +92,6 @@ config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp
                       'adapt_span_init': 0.002, 'adapt_span_cache': True, 'nb_heads': 12,'bs': 128,
                       'mask_size': [20,36]}
 adaptive_span = AdaptiveSpan(**config)
-adaptive_span.get_current_avg_span() # Returns average span
-adaptive_span.get_current_max_span() # Returns maximum span
-adaptive_span.get_trim_len() # Returns length that can be trimmed
-adaptive_span.clamp_param() # Clamps values of parameter to stay between [0,1]
 
 attention_scores_0 = torch.randn(128,12,26,36) # These scores come from softmax
 attention_scores_1 = torch.randn(128,12,26,20) # These scores come from softmax
@@ -147,18 +146,6 @@ from fluence.optim.lookahead import Lookahead
 model = torchvision.models.AlexNet()                        # Can be a transformer
 base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
 optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Acknowledgements">Acknowledgements<a class="anchor-link" href="#Acknowledgements"> </a></h4><ul>
-<li><a href="https://github.com/huggingface/transformers/">Hugging face Transformer</a></li>
-<li><a href="https://github.com/facebookresearch/adaptive-span">Adaptive Attention Span for Transformers</a></li>
-<li><a href="https://github.com/deep-spin/entmax">entmax</a></li>
-<li><a href="https://github.com/airsplay/lxmert">LXMERT</a></li>
-</ul>
 
 </div>
 </div>

@@ -30,7 +30,14 @@ class Lamb(Optimizer):
     """
 
     def __init__(
-        self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-6, weight_decay=0, adam=False, min_trust=None,
+        self,
+        params,
+        lr=1e-3,
+        betas=(0.9, 0.999),
+        eps=1e-6,
+        weight_decay=0,
+        adam=False,
+        min_trust=None,
     ):
         if not 0.0 <= lr:
             raise ValueError("Invalid learning rate: {}".format(lr))
@@ -38,24 +45,18 @@ class Lamb(Optimizer):
             raise ValueError("Invalid epsilon value: {}".format(eps))
         if not 0.0 <= betas[0] < 1.0:
             raise ValueError(
-                "Invalid beta parameter at \
-                              index 0: {}".format(
-                    betas[0]
-                )
+                "Invalid beta parameter at                               index 0: {}"
+                .format(betas[0])
             )
         if not 0.0 <= betas[1] < 1.0:
             raise ValueError(
-                "Invalid beta parameter at \
-                              index 1: {}".format(
-                    betas[1]
-                )
+                "Invalid beta parameter at                               index 1: {}"
+                .format(betas[1])
             )
         if min_trust and not 0.0 <= min_trust < 1.0:
             raise ValueError(
-                "Minimum trust range from 0 to \
-                              1: {}".format(
-                    min_trust
-                )
+                "Minimum trust range from 0 to                               1: {}"
+                .format(min_trust)
             )
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         self.adam = adam
@@ -79,8 +80,8 @@ class Lamb(Optimizer):
                 grad = p.grad.data
                 if grad.is_sparse:
                     raise RuntimeError(
-                        "Lamb does not support sparse gradients, \
-                         consider SparseAdam instad."
+                        "Lamb does not support sparse gradients,                       "
+                        "   consider SparseAdam instad."
                     )
 
                 state = self.state[p]
