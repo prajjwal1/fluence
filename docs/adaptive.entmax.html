@@ -1,6 +1,6 @@
 ---
 
-title: fluence.adaptive.entmax
+title: entmax
 
 keywords: fastai
 sidebar: home_sidebar
@@ -37,20 +37,6 @@ description: "Entmax as a replacement for softmax to get sparse attention weight
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>51:80: E501 line too long (80 &gt; 79 characters)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -221,6 +207,27 @@ ensure_sum_one : bool,
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Usage</span>
+<span class="n">num_attention_heads</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">entmax_alpha</span> <span class="o">=</span> <span class="n">EntmaxAlpha</span><span class="p">(</span><span class="n">num_attention_heads</span><span class="p">)</span>
+<span class="n">attention_scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">)</span>
+<span class="n">attention_scores</span> <span class="o">=</span> <span class="n">entmax_alpha</span><span class="p">(</span><span class="n">attention_scores</span><span class="p">)</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 

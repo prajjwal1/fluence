@@ -1,10 +1,10 @@
 {
   "fluence": {
     "Overview": "/",
-    "fluence.adaptive.entmax": "/adaptive.entmax",
-    "fluence.nn.layerdrop": "/adaptive.layerdrop",
+    "entmax": "/adaptive.entmax",
+    "layerdrop": "/adaptive.layerdrop",
     "fluence.adaptive.adaptive_span": "/adaptive.span",
-    "fluence.optim.lamb": "/optim.lamb",
+    "lamb optimizer": "/optim.lamb",
     "Lookahead Optimizer": "/optim.lookahead",
     "Importance sampling with clustering": "/sampling.clustering"
   }
