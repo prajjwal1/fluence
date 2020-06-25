@@ -10,23 +10,23 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: fluence.adaptive.adaptive_span
-      url: /adaptive_span
-    - output: web,pdf
-      title: sampling with clustering
-      url: /clustering
-    - output: web,pdf
       title: fluence.adaptive.entmax
-      url: /entmax
-    - output: web,pdf
-      title: fluence.optim.lamb
-      url: /lamb
+      url: /adaptive.entmax
     - output: web,pdf
       title: fluence.nn.layerdrop
-      url: /layerdrop
+      url: /adaptive.layerdrop
     - output: web,pdf
-      title: fluence.optim.lookahead
-      url: /lookahead
+      title: fluence.adaptive.adaptive_span
+      url: /adaptive.span
+    - output: web,pdf
+      title: fluence.optim.lamb
+      url: /optim.lamb
+    - output: web,pdf
+      title: Lookahead Optimizer
+      url: /optim.lookahead
+    - output: web,pdf
+      title: Importance sampling with clustering
+      url: /sampling.clustering
     output: web
     title: fluence
   output: web
