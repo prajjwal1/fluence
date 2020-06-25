@@ -25,5 +25,4 @@ doc_url = "https://prajjwal1.github.io/fluence/"
 
 git_url = "https://github.com/prajjwal1/fluence/tree/master/"
 
-def custom_doc_links(name):
-    return None
+def custom_doc_links(name): return None
