@@ -13,6 +13,9 @@ entries:
       title: fluence.adaptive.adaptive_span
       url: /adaptive_span
     - output: web,pdf
+      title: sampling with clustering
+      url: /clustering
+    - output: web,pdf
       title: fluence.adaptive.entmax
       url: /entmax
     - output: web,pdf

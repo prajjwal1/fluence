@@ -7,13 +7,13 @@ fluence: $(SRC)
 	touch fluence
 
 style:
-	isort --recursive fluence 
-	black --line-length 119 --target-version py35 fluence 
+	black fluence 
+	isort --recursive --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=88 fluence
 
 quality:
-	black --check --line-length 119 --target-version py35 fluence 
-	isort --check-only --recursive fluence 
-	flake8 fluence examples 
+	flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+	black --check fluence
+	isort --check-only --recursive --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=88 fluence
 
 docs_serve: docs
 	cd docs && bundle exec jekyll serve

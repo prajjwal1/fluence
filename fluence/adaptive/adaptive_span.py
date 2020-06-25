@@ -72,11 +72,15 @@ class AdaptiveSpan(nn.Module):
         )  # [bs,nb_heads,1,1]
         self.mask_size = mask_size
 
-        mask_template_0 = torch.linspace(1 - self.mask_size[0], 0, steps=self.mask_size[0])  # [attn_span]
+        mask_template_0 = torch.linspace(
+            1 - self.mask_size[0], 0, steps=self.mask_size[0]
+        )  # [attn_span]
         self.register_buffer("mask_template_0", mask_template_0)
 
         if len(self.mask_size) > 1:
-            mask_template_1 = torch.linspace(1 - self.mask_size[1], 0, steps=self.mask_size[1])
+            mask_template_1 = torch.linspace(
+                1 - self.mask_size[1], 0, steps=self.mask_size[1]
+            )
             self.register_buffer("mask_template_1", mask_template_1)
 
     def mask_forward(self, x):

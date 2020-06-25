@@ -2,30 +2,13 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {
-    "AdaptiveSpan": "adaptive_span.ipynb",
-    "AlphaChooser": "entmax.ipynb",
-    "EntmaxAlpha": "entmax.ipynb",
-    "EntmaxBisectFunction": "entmax.ipynb",
-    "entmax_bisect": "entmax.ipynb",
-    "Lamb": "lamb.ipynb",
-    "Layerdrop": "layerdrop.ipynb",
-    "Layerdrop_Cross": "layerdrop.ipynb",
-    "Lookahead": "lookahead.ipynb",
-}
+index = {}
 
-modules = [
-    "adaptive/adaptive_span.py",
-    "adaptive/entmax.py",
-    "optim/lamb.py",
-    "adaptive/layerdrop.py",
-    "optim/lookahead.py",
-]
+modules = []
 
 doc_url = "https://prajjwal1.github.io/fluence/"
 
 git_url = "https://github.com/prajjwal1/fluence/tree/master/"
-
 
 def custom_doc_links(name):
     return None
