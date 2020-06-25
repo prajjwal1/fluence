@@ -84,7 +84,7 @@ description: "Fluence is a Pytorch based deep learning library focussed on provi
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Minimal-Examples">Minimal Examples<a class="anchor-link" href="#Minimal-Examples"> </a></h2><p>Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples</p>
+<h2 id="Minimal-Examples">Minimal Examples<a class="anchor-link" href="#Minimal-Examples"> </a></h2><p>Fluence is easy to use and fully compatible with Huggingface transformers. Here are some of the examples</p>
 <h3 id="Using-Adaptive-Attention-Span">Using Adaptive Attention Span<a class="anchor-link" href="#Using-Adaptive-Attention-Span"> </a></h3>
 <pre><code>import torch
 from fluence.adaptive.adaptive_span import AdaptiveSpan
@@ -94,7 +94,7 @@ config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp
 adaptive_span = AdaptiveSpan(**config)
 
 attention_scores_0 = torch.randn(128,12,26,36) # These scores come from softmax
-attention_scores_1 = torch.randn(128,12,26,20) # These scores come from softmax
+attention_scores_1 = torch.randn(128,12,26,20) # (Optional) These scores come from softmax
 adaptive_span(attention_scores_0).shape # Soft masking function is multiplied
 adaptive_span(attention_scores_1).shape</code></pre>
 
@@ -146,6 +146,46 @@ from fluence.optim.lookahead import Lookahead
 model = torchvision.models.AlexNet()                        # Can be a transformer
 base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
 optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="fluence.sampling">fluence.sampling<a class="anchor-link" href="#fluence.sampling"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span>from fluence.sampling.clustering import Clustering_Arguments, Clustering_Processor
+<span class="c1"># Similar to Huggingface Training Arguments</span>
+<span class="nv">clustering_args</span> <span class="o">=</span> Clustering_Arguments<span class="o">(</span>
+        <span class="nv">batch_size</span><span class="o">=</span><span class="m">32</span>,
+        <span class="nv">num_clusters_elements</span><span class="o">=</span><span class="m">32</span>,
+        <span class="nv">embedding_path</span><span class="o">=</span><span class="s2">&quot;/home/nlp/experiments/cls_embeddings_mnli.pth&quot;</span>,
+        <span class="nv">num_clusters</span><span class="o">=</span><span class="m">8</span>,
+        <span class="nv">cluster_output_path</span><span class="o">=</span><span class="s2">&quot;/home/nlp/experiments/tmp/c.pth&quot;</span>,
+    <span class="o">)</span>
+
+<span class="nv">clustering_proc</span> <span class="o">=</span> Clustering_Processor<span class="o">(</span>vars<span class="o">(</span>clustering_obj<span class="o">))</span>
+
+<span class="c1"># Now perform sampling by data percentage,  or centroids</span>
+<span class="nv">cluster_indices</span> <span class="o">=</span> clustering_proc.get_cluster_indices_by_pct<span class="o">(</span>
+        clustering_args.data_pct, embeddings.shape<span class="o">[</span><span class="m">0</span><span class="o">]</span>
+    <span class="o">)</span>
+<span class="c1"># By number of clusters</span>
+<span class="nv">cluster_indices</span> <span class="o">=</span> clustering_proc.get_cluster_indices_by_num<span class="o">(</span>
+    clustering_args.num_clusters_elements
+<span class="o">)</span>
+<span class="c1"># Or centroids</span>
+<span class="nv">cluster_indices</span> <span class="o">=</span> clustering_proc.get_cluster_indices_by_num<span class="o">(</span>
+        clustering_args.num_clusters_elements
+    <span class="o">)</span>
+
+<span class="nv">train_dataset</span> <span class="o">=</span> GlueDataset<span class="o">(</span>data_args, tokenizer<span class="o">)</span>
+<span class="nv">train_dataset</span> <span class="o">=</span> torch.utils.data.Subset<span class="o">(</span>train_dataset, cluster_indices<span class="o">)</span>
+</pre></div>
 
 </div>
 </div>

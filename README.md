@@ -26,7 +26,7 @@ The library contains implementation for the following approaches (many more to c
 Please head to this [link](prajjwal1.github.io/fluence) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
 
 ## Minimal Examples
-Right now, it consists of major adaptive computation approaches which have been tested with transformers. Fluence is easy to use. Here are some of the examples
+Fluence is easy to use and fully compatible with Huggingface transformers. Here are some of the examples
 
 
 ### Using Adaptive Attention Span
@@ -39,7 +39,7 @@ config = {'attn_span': 1024, 'adapt_span_loss_coeff': 0.000005, 'adapt_span_ramp
 adaptive_span = AdaptiveSpan(**config)
 
 attention_scores_0 = torch.randn(128,12,26,36) # These scores come from softmax
-attention_scores_1 = torch.randn(128,12,26,20) # These scores come from softmax
+attention_scores_1 = torch.randn(128,12,26,20) # (Optional) These scores come from softmax
 adaptive_span(attention_scores_0).shape # Soft masking function is multiplied
 adaptive_span(attention_scores_1).shape
 ```
@@ -72,6 +72,38 @@ from fluence.optim.lookahead import Lookahead
 model = torchvision.models.AlexNet()                        # Can be a transformer
 base_optim = Lamb(params=model.parameters(),lr=1e-5, weight_decay=1.2e-6, min_trust=0.25)
 optim = Lookahead(base_optimizer=base_optim, k=5, alpha=0.8)
+```
+
+### fluence.sampling
+
+```bash
+from fluence.sampling.clustering import Clustering_Arguments, Clustering_Processor
+# Similar to Huggingface Training Arguments
+clustering_args = Clustering_Arguments(
+        batch_size=32,
+        num_clusters_elements=32,
+        embedding_path="/home/nlp/experiments/cls_embeddings_mnli.pth",
+        num_clusters=8,
+        cluster_output_path="/home/nlp/experiments/tmp/c.pth",
+    )
+
+clustering_proc = Clustering_Processor(vars(clustering_obj))
+
+# Now perform sampling by data percentage,  or centroids
+cluster_indices = clustering_proc.get_cluster_indices_by_pct(
+        clustering_args.data_pct, embeddings.shape[0]
+    )
+# By number of clusters
+cluster_indices = clustering_proc.get_cluster_indices_by_num(
+    clustering_args.num_clusters_elements
+)
+# Or centroids
+cluster_indices = clustering_proc.get_cluster_indices_by_num(
+        clustering_args.num_clusters_elements
+    )
+
+train_dataset = GlueDataset(data_args, tokenizer)
+train_dataset = torch.utils.data.Subset(train_dataset, cluster_indices)
 ```
 
 Author: Prajjwal Bhargava ([@prajjwal_1](https://twitter.com/prajjwal_1))
