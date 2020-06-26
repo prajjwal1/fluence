@@ -15,12 +15,15 @@ The library contains implementation for the following approaches (many more to c
     - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
     - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 
+- [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
+
 - [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers): 
     - [Lamb](https://arxiv.org/abs/1904.00962)
     - [Lookahead](https://arxiv.org/abs/1907.08610)
     
 - [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
     - Clustering
+
 
 # Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
