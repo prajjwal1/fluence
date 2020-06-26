@@ -1,5 +1,0 @@
-pytorch>=1.4
-flake8
-pycodestyle_magic
-nbdev
-blackcellmagic
