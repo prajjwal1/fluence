@@ -37,7 +37,6 @@ jobs:
     - name: Check code quality
       run: |
         black --check fluence tests
-        isort --check-only --recursive --multi-line=3 --trailing-comma --force-grid=0 --use-parentheses --line-width=88 fluence tests
     - name: Test with pytest
       run: |
         pytest tests/

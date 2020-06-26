@@ -2,13 +2,14 @@
 
 __all__ = ["Clustering_Arguments", "Clustering_Processor"]
 
+from dataclasses import dataclass, field
+
 # Cell
 from typing import Dict, List, Optional
 
 import numpy as np
 import sklearn
 import torch
-from dataclasses import dataclass, field
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics import pairwise_distances_argmin_min
 
