@@ -1,33 +1,37 @@
-name: CI
-on: [push, pull_request]
+
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v1
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.6'
-        architecture: 'x64'
-    - name: Install the library
+        python-version: 3.8
+    - name: Install dependencies
       run: |
-        pip install nbdev jupyter
-        pip install -e .
-    - name: Read all notebooks
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
       run: |
-        nbdev_read_nbs
-    - name: Check if all notebooks are cleaned
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
       run: |
-        echo "Check we are starting with clean git checkout"
-        if [ -n "$(git status -uno -s)" ]; then echo "git status is not clean"; false; fi
-        echo "Trying to strip out notebooks"
-        nbdev_clean_nbs
-        echo "Check that strip out was unnecessary"
-        git status -s # display the status to see which nbs need cleaning up
-        if [ -n "$(git status -uno -s)" ]; then echo -e "!!! Detected unstripped out notebooks\n!!!Remember to run nbdev_install_git_hooks"; false; fi
-    - name: Check if there is no diff library/notebooks
-      run: |
-        if [ -n "$(nbdev_diff_nbs)" ]; then echo -e "!!! Detected difference between the notebooks and the library"; false; fi
-    - name: Run tests
-      run: |
-        nbdev_test_nbs
+        pytest tests/

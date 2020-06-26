@@ -1,6 +1,8 @@
 import unittest
+
 import torch
 from torch import nn
+
 from fluence.adaptive import AdaptiveSpan, EntmaxAlpha, Layerdrop
 
 config = {

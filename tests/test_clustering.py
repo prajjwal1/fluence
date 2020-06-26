@@ -1,14 +1,22 @@
+import os
 import unittest
+import urllib
+
 import numpy as np
 import torch
-from transformers import GlueDataTrainingArguments as DataTrainingArguments
-from transformers import AutoTokenizer, GlueDataset
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics import pairwise_distances_argmin_min
+from transformers import AutoTokenizer, GlueDataset
+from transformers import GlueDataTrainingArguments as DataTrainingArguments
+
 from fluence.sampling import Clustering_Arguments, Clustering_Processor
 
 
 def get_embeddings(embedding_path):
+    if not os.path.isfile(embedding_path):
+        url = "https://s3.amazonaws.com/models.huggingface.co/bert/prajjwal1/albert-base-v2-mnli/cls_embeddings_mnli.pth"
+        embedding_path = "cls_embeddings_mnli.pth"
+        urllib.request.urlretreive(url, embedding_path)
     embeddings = torch.load(embedding_path)
     embeddings = np.concatenate(embeddings)  # (392702, 768)
     return embeddings
@@ -24,7 +32,7 @@ class Test_Clustering(unittest.TestCase):
         super(Test_Clustering, self).__init__(*args, **kwargs)
         self.embedding_path = "/home/nlp/experiments/cls_embeddings_mnli.pth"
         self.cluster_output_path = "/home/nlp/experiments/tmp/c.pth"
-        self.data_dir = "/home/nlp/data/glue_data/MNLI"
+        # self.data_dir = "/home/nlp/data/glue_data/MNLI"
         self.embeddings = get_embeddings(self.embedding_path)
         self.clustering_obj = get_clustering_obj(self.embeddings)
 

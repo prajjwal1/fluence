@@ -1,7 +1,9 @@
 import unittest
+
 import torch
-from fluence.optim import Lookahead, Lamb
 import torchvision
+
+from fluence.optim import Lamb, Lookahead
 
 
 class Test_Optim(unittest.TestCase):
