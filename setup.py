@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Fluence",
-    version="0.1.3",
+    version="0.1.4",
     author="Prajjwal Bhargava",
     author_email="prajjwalin@pm.me",
     description=(
@@ -26,7 +26,7 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
     classifiers=[
-        "Development Status :: 0 - Alpha",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
