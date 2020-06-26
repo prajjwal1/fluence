@@ -1,6 +1,7 @@
 import os
 import unittest
 import urllib
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -15,8 +16,8 @@ from fluence.sampling import Clustering_Arguments, Clustering_Processor
 def get_embeddings(embedding_path):
     if not os.path.isfile(embedding_path):
         url = "https://s3.amazonaws.com/models.huggingface.co/bert/prajjwal1/albert-base-v2-mnli/cls_embeddings_mnli.pth"
-        embedding_path = "cls_embeddings_mnli.pth"
-        urllib.request.urlretreive(url, embedding_path)
+        embedding_path = str(Path.home()) + "/cls_embeddings_mnli.pth"
+        urllib.request.urlretrieve(url, embedding_path)
     embeddings = torch.load(embedding_path)
     embeddings = np.concatenate(embeddings)  # (392702, 768)
     return embeddings
