@@ -2,7 +2,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: build
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
+        pip install flake8 pytest black isort
         pip install torch transformers sklearn torchvision
         python3 setup.py install --user
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -34,6 +34,10 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Check code quality
+      run: |
+        black --check fluence tests
+        isort --check-only --recursive --multi-line=3 --trailing-comma --force-grid=0 --use-parentheses --line-width=88 fluence tests
     - name: Test with pytest
       run: |
         pytest tests/

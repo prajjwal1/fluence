@@ -2,7 +2,7 @@
 > Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms. Although the main focus is to provide support with transformers, it can be extended with other architectures as well.
 
 
-![](https://github.com/prajjwal1/fluence/workflows/CI/badge.svg)
+![badge](https://github.com/prajjwal1/fluence/workflows/build/badge.svg)
 [![PyPI version](https://badge.fury.io/py/fluence.svg)](https://badge.fury.io/py/fluence)
 
 # Installing
