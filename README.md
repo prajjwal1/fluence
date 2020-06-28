@@ -6,8 +6,16 @@
 [![PyPI version](https://badge.fury.io/py/fluence.svg)](https://badge.fury.io/py/fluence)
 
 # Installing
+For stable (recommended) version:
+```bash
+pip3 install --user fluence
+```
 
-`python3 setup.py install --user`
+For development version:
+```bash
+git clone https://github.com/prajjwal1/fluence
+python3 setup.py install --user
+```
 
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
