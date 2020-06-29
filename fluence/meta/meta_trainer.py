@@ -11,6 +11,7 @@ from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import RandomSampler, SequentialSampler
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm, trange
 from transformers import (
     AutoConfig,
@@ -31,9 +32,6 @@ from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR, is_wandb_available
 from .meta_dataset import MetaDataset
 
 logger = logging.getLogger(__name__)
-
-if is_wandb_available():
-    import wandb
 
 
 @dataclass
@@ -65,8 +63,6 @@ class MetaTrainer(Trainer):
         self.prediction_loss_only = prediction_loss_only
         self.optimizers = optimizers
         self.eval_results = {}
-        if is_wandb_available():
-            self._setup_wandb()
         set_seed(self.args.seed)
 
     def get_loss_mean(self, loss):
