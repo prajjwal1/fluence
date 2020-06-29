@@ -190,6 +190,11 @@ class MetaTrainer(Trainer):
         tqdm_iterator = tqdm(train_dataloader, desc="Batch Index")
 
         for epoch in tqdm(range(int(self.args.num_train_epochs))):
+            if isinstance(train_dataloader, DataLoader) and isinstance(
+                train_dataloader.sampler, DistributedSampler
+            ):
+                train_dataloader.sampler.set_epoch(epoch)
+
             for batch_idx, meta_batch in enumerate(tqdm_iterator):
                 model.zero_grad()
                 target_batch = next(iter(eval_dataloader))
