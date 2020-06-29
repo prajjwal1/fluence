@@ -34,10 +34,10 @@ The library contains implementation for the following approaches (many more to c
     - Clustering
 
 
-## Documentation 
+### Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
 
-## Contribution
+### Contribution
 I'd really appreciate if you can file an issue or send a PR if you encounter any bug or want some features to be added. Please checkout the [contributing guide](https://github.com/prajjwal1/fluence/blob/master/CONTRIBUTING.md) for more details.
 
 
