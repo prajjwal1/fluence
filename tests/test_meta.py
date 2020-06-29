@@ -8,8 +8,6 @@ from transformers import default_data_collator
 
 from fluence.meta import MetaArguments, MetaDataset, MetaTrainer
 
-os.environ["WANDB_DISABLED"] = "True"
-
 
 class Test_Meta(unittest.TestCase):
     def __init__(self, *args, **kwargs):
