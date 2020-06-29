@@ -11,7 +11,6 @@ from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import RandomSampler, SequentialSampler
-from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm, trange
 from transformers import (
     AutoConfig,
