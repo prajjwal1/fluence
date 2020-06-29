@@ -24,6 +24,7 @@ setuptools.setup(
         "tqdm >= 4.27",
         "transformers",
         "higher",
+        "pandas",
     ],
     python_requires=">=3.6",
     classifiers=[
