@@ -1,5 +1,5 @@
 # Fluence
-> Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms. Although the main focus is to provide support with transformers, it can be extended with other architectures as well.
+> Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms. Although the main focus is to provide support with transformers for NLP tasks, it can be extended with other domains and architectures as well. Currently in pre-alpha stage.
 
 
 ![badge](https://github.com/prajjwal1/fluence/workflows/build/badge.svg)
@@ -14,6 +14,7 @@ pip3 install --user fluence
 For development version:
 ```bash
 git clone https://github.com/prajjwal1/fluence
+cd fluence
 python3 setup.py install --user
 ```
 
@@ -33,10 +34,14 @@ The library contains implementation for the following approaches (many more to c
     - Clustering
 
 
-# Documentation 
+## Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
 
-# Tests
+## Contribution
+I'd really appreciate if you can file an issue or send a PR if you encounter any bug or want some features to be added. Please checkout the [contributing guide](https://github.com/prajjwal1/fluence/blob/master/CONTRIBUTING.md) for more details.
+
+
+## Tests
 Tests can be run with pytest
 ```
 pytest tests/
