@@ -145,3 +145,4 @@ checklink/cookies.txt
 examples/runs/
 examples/wandb/
 cython_debug/
+runs/

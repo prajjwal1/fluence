@@ -16,9 +16,10 @@ class Test_Siamese(unittest.TestCase):
     def setUpClass(self):
         self.MODEL_ID = "albert-base-v2"
         self.data_args = DataTrainingArguments(
-            task_name="mrpc", data_dir="./tests/fixtures/tests_samples/MRPC",
-        )  # overwrite_cache=True,
-        # )
+            task_name="mrpc",
+            data_dir="./tests/fixtures/tests_samples/MRPC",
+            overwrite_cache=True,
+        )
         self.tokenizer = AutoTokenizer.from_pretrained(self.MODEL_ID)
         self.train_dataset = SiameseGlueDataset(self.data_args, self.tokenizer)
         self.eval_dataset = SiameseGlueDataset(
