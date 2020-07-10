@@ -10,8 +10,8 @@ from fluence.meta import MetaArguments, MetaDataset, MetaTrainer
 
 
 class Test_Meta(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        super(Test_Meta, self).__init__(*args, **kwargs)
+    @classmethod
+    def setUpClass(self):
         self.MODEL_ID = "albert-base-v2"
         self.tokenizer = AutoTokenizer.from_pretrained(self.MODEL_ID)
         self.model = AutoModelForSequenceClassification.from_pretrained(self.MODEL_ID)

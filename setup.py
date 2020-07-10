@@ -5,12 +5,12 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Fluence",
-    version="0.1.5",
+    version="0.1.6",
     author="Prajjwal Bhargava",
     author_email="prajjwalin@pm.me",
     description=(
         "Pytorch based deep learning library focussed on providing computationally"
-        " efficient low resource methods and algorithms"
+        " efficient low resource methods and algorithms for NLP"
     ),
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
