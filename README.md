@@ -33,6 +33,7 @@ The library contains implementation for the following approaches (many more to c
 - [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
     - Clustering
 
+- [Siamese Transformers](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
 
 ### Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.

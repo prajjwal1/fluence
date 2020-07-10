@@ -29,11 +29,11 @@ def get_clustering_obj(embeddings):
 
 
 class Test_Clustering(unittest.TestCase):
-    def __init__(self, *args, **kwargs):
-        super(Test_Clustering, self).__init__(*args, **kwargs)
+    @classmethod
+    def setUpClass(self):
         self.embedding_path = "/home/nlp/experiments/cls_embeddings_mnli.pth"
         self.cluster_output_path = "/home/nlp/experiments/tmp/c.pth"
-        # self.data_dir = "/home/nlp/data/glue_data/MNLI"
+        self.data_dir = "./tests/fixtures/tests_samples/MRPC"
         self.embeddings = get_embeddings(self.embedding_path)
         self.clustering_obj = get_clustering_obj(self.embeddings)
 
@@ -65,20 +65,21 @@ class Test_Clustering(unittest.TestCase):
         )
         self.assertTrue(len(cluster_indices) > 10000)
 
+        # Testing with Pytorch Dataset
+        data_args = DataTrainingArguments(
+            task_name="MRPC", data_dir=self.data_dir, overwrite_cache=True
+        )
+        tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")
+        train_dataset = GlueDataset(data_args, tokenizer)
+        train_dataset = torch.utils.data.Subset(train_dataset, cluster_indices)
+        self.assertEqual(len(train_dataset[0].input_ids), 128)
+
     def test_cluster_centroids(self):
         clustering_proc = Clustering_Processor(vars(self.clustering_obj))
         cluster_indices = clustering_proc.get_cluster_indices_from_centroid(
             self.embeddings
         )
         self.assertEqual(len(cluster_indices), 512)
-
-
-#    def test_torch_hf_dataset(self):
-#        data_args = DataTrainingArguments(task_name="MNLI", data_dir=self.data_dir)
-#        tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")
-#        train_dataset = GlueDataset(data_args, tokenizer)
-#        train_dataset = torch.utils.data.Subset(train_dataset, self.cluster_indices)
-#        self.assertEqual(len(train_dataset[0].input_ids), 128)
 
 
 if __name__ == "__main__":
