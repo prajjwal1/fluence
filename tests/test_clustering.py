@@ -66,7 +66,9 @@ class Test_Clustering(unittest.TestCase):
         self.assertTrue(len(cluster_indices) > 10000)
 
         # Testing with Pytorch Dataset
-        data_args = DataTrainingArguments(task_name="MRPC", data_dir=self.data_dir)
+        data_args = DataTrainingArguments(
+            task_name="MRPC", data_dir=self.data_dir, overwrite_cache=True
+        )
         tokenizer = AutoTokenizer.from_pretrained("albert-base-v2")
         train_dataset = GlueDataset(data_args, tokenizer)
         train_dataset = torch.utils.data.Subset(train_dataset, cluster_indices)
