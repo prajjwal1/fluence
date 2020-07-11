@@ -1,26 +1,35 @@
 <p align="center">
-<img src="https://github.com/prajjwal1/fluence/blob/master/docs/logo.png" width="150">
+<img src="https://raw.githubusercontent.com/prajjwal1/fluence/master/docs/logo.png" width="500">
 <br />
 <br />
+<a href="https://github.com/prajjwal1/fluence/actions"><img alt="Build Status" src="https://github.com/prajjwal1/fluence/workflows/build/badge.svg" /></a>
+<a href="https://github.com/prajjwal1/fluence/releases"><img alt="Latest Release" src="https://img.shields.io/pypi/v/fluence"/></a>
 <a href="https://github.com/prajjwal1/fluence/blob/master/LICENSE"><img alt="Apache" src="https://img.shields.io/github/license/prajjwal1/fluence" /></a>
-<a href="https://github.com/prajjwal1/fluence/releases"><img alt="Latest Release" src="https://img.shields.io/pypi/v/fluence?style=flat-square" /></a>
-<a href="https://github.com/prajjwal1/fluence/actions"><img alt="Build Status" src="https://github.com/prajjwal1/fluence/workflows/build/build.svg" /> </a>
 -------------------------------------------------------------------------------
 
 Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms for NLP. Although the main focus is to provide support with transformers for NLP tasks, it can be extended with other domains and architectures as well. Currently in pre-alpha stage.
 
-<details><summary>List of implemented papers</summary><p>
-- ** Adaptive Methods **
-    - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
-    - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
-    - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
-- ** Meta Learning **
-    -[Model Agnostic Meta Learning](https://arxiv.org/abs/1703.03400)
+<details>
+<summary>List of implemented papers</summary>
 
-</p></details>
+#### Adaptive Methods
+- [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
+- [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
+- [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
+#### Meta Learning
+- [Model Agnostic Meta Learning](https://arxiv.org/abs/1703.03400)
+-------------------------------------------------------------------------------
+</details>
 
 - [Installation](#installing)
 - [Overview](#overview)
+
+## Features
+- Build computationally efficient models
+- Interpretability Analysis
+- Fit heavy models on same GPUs
+- Good results with less data
+- Fully compatible with HF Transformers and Pytorch
 
 ## Installing
 For stable (recommended) version:
