@@ -1,11 +1,23 @@
-![Fluence Logo](https://github.com/prajjwal1/fluence/blob/master/docs/logo.png)
+<p align="center">
+<img src="https://github.com/prajjwal1/fluence/blob/master/docs/logo.png" width="150">
+<br />
+<br />
+<a href="https://github.com/prajjwal1/fluence/blob/master/LICENSE"><img alt="Apache" src="https://img.shields.io/github/license/prajjwal1/fluence" /></a>
+<a href="https://github.com/prajjwal1/fluence/releases"><img alt="Latest Release" src="https://img.shields.io/pypi/v/fluence?style=flat-square" /></a>
+<a href="https://github.com/prajjwal1/fluence/actions"><img alt="Build Status" src="https://github.com/prajjwal1/fluence/workflows/build/build.svg" /> </a>
 -------------------------------------------------------------------------------
 
 Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms for NLP. Although the main focus is to provide support with transformers for NLP tasks, it can be extended with other domains and architectures as well. Currently in pre-alpha stage.
 
+<details><summary>List of implemented papers</summary><p>
+- ** Adaptive Methods **
+    - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
+    - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
+    - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
+- ** Meta Learning **
+    -[Model Agnostic Meta Learning](https://arxiv.org/abs/1703.03400)
 
-![badge](https://github.com/prajjwal1/fluence/workflows/build/badge.svg)
-[![PyPI version](https://badge.fury.io/py/fluence.svg)](https://badge.fury.io/py/fluence)
+</p></details>
 
 - [Installation](#installing)
 - [Overview](#overview)
@@ -31,8 +43,6 @@ The library contains implementation for the following approaches (many more to c
     - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 - [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
 - [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers): 
-    - [Lamb](https://arxiv.org/abs/1904.00962)
-    - [Lookahead](https://arxiv.org/abs/1907.08610)
 - [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
 - [Siamese Transformers](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
 
