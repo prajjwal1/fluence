@@ -48,13 +48,10 @@ python3 setup.py install --user
 ## Overview
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
-    - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
-    - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
-    - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 - [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
 - [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers): 
 - [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
-- [Siamese Transformers](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
+- [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
 
 ## Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
