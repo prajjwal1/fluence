@@ -14,23 +14,25 @@ Fluence is a Pytorch based deep learning library focussed on providing computati
 <summary>List of implemented papers</summary>
 
 #### Adaptive Methods
-- [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
-- [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
-- [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
+- [Adaptive Attention Span in Transformers (ACL 2019)](https://arxiv.org/abs/1905.07799)
+- [Adaptively Sparse Transformers (EMNLP 2019)](https://arxiv.org/abs/1909.00015)
+- [Reducing Transformer Depth on Demand with Structured Dropout (ICLR 2020)](https://arxiv.org/abs/1909.11556)
 #### Meta Learning
-- [Model Agnostic Meta Learning](https://arxiv.org/abs/1703.03400)
+- [Model Agnostic Meta Learning (ICML 2017)](https://arxiv.org/abs/1703.03400)
 -------------------------------------------------------------------------------
+#### Debiasing
+- [Learning Robust Representations by Projecting Superficial Statistics Out (ICLR 2019)](https://openreview.net/pdf?id=rJEjjoR9K7)
+
 </details>
 
 - [Installation](#installing)
 - [Overview](#overview)
 
-## Features
-- Build computationally efficient models
-- Interpretability Analysis
-- Fit heavy models on same GPUs
-- Good results with less data
-- Fully compatible with HF Transformers and Pytorch
+## Why Fluence ?
+Fluence is targeted towards two main goals: 
+1. Low resource / computationally efficient algorithms
+2. Algorithms that either enhance our understanding of current methods or show where SoTA methods fail.
+
 
 ## Installing
 For stable (recommended) version:
@@ -48,13 +50,10 @@ python3 setup.py install --user
 ## Overview
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
-    - [Adaptive Attention Span in Transformers](https://arxiv.org/abs/1905.07799)
-    - [Adaptively Sparse Transformers](https://arxiv.org/abs/1909.00015)
-    - [Reducing Transformer Depth on Demand with Structured Dropout](https://arxiv.org/abs/1909.11556)
 - [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
 - [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers): 
 - [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
-- [Siamese Transformers](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
+- [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
 
 ## Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
