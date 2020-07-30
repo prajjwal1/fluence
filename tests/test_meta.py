@@ -17,7 +17,6 @@ class Test_Meta(unittest.TestCase):
         self.model = AutoModelForSequenceClassification.from_pretrained(self.MODEL_ID)
 
     def test_meta_dataset(self):
-        MODEL_ID = "albert-base-v2"
         data_args = DataTrainingArguments(
             task_name="mrpc",
             data_dir="./tests/fixtures/tests_samples/MRPC",
