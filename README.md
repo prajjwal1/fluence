@@ -51,15 +51,16 @@ python3 setup.py install --user
 The library contains implementation for the following approaches (many more to come):
 - [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
 - [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
-- [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers): 
-- [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling):
+- [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers) 
+- [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
 - [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
+- [Debiasing](https://github.com/prajjwal1/fluence/wiki/Debiasing)
 
 ## Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
 
 ### Contribution
-I'd really appreciate if you can file an issue or send a PR if you encounter any bug or want some features to be added. Please checkout the [contributing guide](https://github.com/prajjwal1/fluence/blob/master/CONTRIBUTING.md) for more details.
+You can contribute by either filing an issue or sending a Pull Request (if you encounter any bug or want some features to be added). Please checkout the [contributing guide](https://github.com/prajjwal1/fluence/blob/master/CONTRIBUTING.md) for more details.
 
 
 ### Tests
