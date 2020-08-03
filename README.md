@@ -19,9 +19,9 @@ Fluence is a Pytorch based deep learning library focussed on providing computati
 - [Reducing Transformer Depth on Demand with Structured Dropout (ICLR 2020)](https://arxiv.org/abs/1909.11556)
 #### Meta Learning
 - [Model Agnostic Meta Learning (ICML 2017)](https://arxiv.org/abs/1703.03400)
--------------------------------------------------------------------------------
 #### Debiasing
 - [Learning Robust Representations by Projecting Superficial Statistics Out (ICLR 2019)](https://openreview.net/pdf?id=rJEjjoR9K7)
+-------------------------------------------------------------------------------
 
 </details>
 
@@ -32,7 +32,7 @@ Fluence is a Pytorch based deep learning library focussed on providing computati
 Fluence is targeted towards two main goals: 
 1. Low resource / computationally efficient algorithms
 2. Algorithms that either enhance our understanding of current methods or show where SoTA methods fail.
-
+It is as straightforward to use as HF Transformers, and fully integrates with Pytorch.
 
 ## Installing
 For stable (recommended) version:
@@ -64,9 +64,10 @@ You can contribute by either filing an issue or sending a Pull Request (if you e
 
 
 ### Tests
-Tests can be run with pytest
+
+Fluence comes with an [extensive test suite](https://github.com/prajjwal1/fluence/tree/master/tests). Each and every module has been tested before it comes into master branch.
 ```
-pytest tests/
+pytest tests/ -v
 ```
 
 Author: Prajjwal Bhargava ([@prajjwal_1](https://twitter.com/prajjwal_1))
