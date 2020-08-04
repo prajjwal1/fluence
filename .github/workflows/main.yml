@@ -36,5 +36,10 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run Tests
       run: |
-        pytest tests/ --ignore=tests/test_clustering.py
+        pytest --cov=./tests --cov-report=xml
         
+    - name: Codecov
+        uses: codecov/codecov-action@v1
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
