@@ -26,7 +26,7 @@ from transformers import (
 )
 from transformers.data.data_collator import DataCollator
 from transformers.trainer import SequentialDistributedSampler
-from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR, is_wandb_available
+from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
 
 from .meta_dataset import MetaDataset
 
@@ -117,18 +117,6 @@ class MetaTrainer(Trainer):
     def train(self):
         train_dataloader = self.get_train_dataloader()
         eval_dataloader = self.get_eval_dataloader(self.eval_dataset)
-        columns = [self.args.train_task, self.args.eval_task]
-        metrics = [
-            "eval_loss",
-            "eval_acc",
-            "eval_f1",
-            "eval_acc_and_f1",
-            "eval_mnli-mm/acc",
-        ]
-        df = pd.DataFrame(columns=columns, index=metrics)
-        for i in range(len(df.columns)):
-            for j in range(len(metrics)):
-                df[columns[i]][metrics[j]] = []
 
         model = self.model
         optimizer, scheduler = self.get_optimizers(
@@ -203,10 +191,10 @@ class MetaTrainer(Trainer):
                         model, inner_optimizer, copy_initial_weights=False
                     ) as (fmodel, diffopt):
 
-                        inner_loss = model(**inputs)[0]
+                        inner_loss = fmodel(**inputs)[0]
                         inner_loss = self.get_loss_mean(inner_loss)
                         diffopt.step(inner_loss)
-                        outer_loss += model(**target_inputs)[0]
+                        outer_loss += fmodel(**target_inputs)[0]
 
                 self.global_step += 1
                 outer_loss = self.get_loss_mean(outer_loss)
