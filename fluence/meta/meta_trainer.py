@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional, Tuple
 
 import higher
-import pandas as pd
 import torch
 from torch.optim.sgd import SGD
 from torch.utils.data.dataloader import DataLoader
@@ -213,7 +212,6 @@ class MetaTrainer(Trainer):
                         logger.info(
                             "%s  %s = %s", self.args.eval_task, key, value,
                         )
-                    df[self.args.train_task][key].append(value)
 
                 # Save model
                 if (
@@ -236,7 +234,4 @@ class MetaTrainer(Trainer):
 
                     logging.info(
                         "*** Results have been saved at %s ***", self.args.output_dir
-                    )
-                    df.to_csv(
-                        self.args.output_dir + self.args.output_file_name + ".csv"
                     )
