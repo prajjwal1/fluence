@@ -30,9 +30,10 @@ Fluence is a Pytorch based deep learning library focussed on providing computati
 
 ## Why Fluence ?
 Fluence is targeted towards two main goals: 
-1. Low resource / computationally efficient algorithms
-2. Algorithms that either enhance our understanding of current methods or show where SoTA methods fail.
-It is as straightforward to use as HF Transformers, and fully integrates with Pytorch.
+1. **Compute efficiency**: Low resource research:
+2. **Robustness**: Algorithms that either enhance our understanding of current methods or show where SoTA methods fail.
+
+It is as straightforward to use as [HF Transformers](https://github.com/huggingface/transformers), and fully integrates with [Pytorch](https://github.com/pytorch/pytorch).
 
 ## Installing
 For stable version:
@@ -48,16 +49,17 @@ python3 setup.py install --user
 ```
 
 ## Overview
-The library contains implementation for the following approaches (many more to come):
-- [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
-- [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)
-- [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers) 
-- [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)
-- [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers)
-- [Debiasing](https://github.com/prajjwal1/fluence/wiki/Debiasing)
+The library contains implementation for the following approaches (many more to come):   
+|  Module            |  Method with documentation
+| -------------------------------------------------------------------------------------- | ----------------------------
+| `fluence.adaptive` | [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Adaptive-Methods)         |
+| `fluence.meta`     | [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)               |      
+| `fluence.optim`    | [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers)                     |
+| `fluence.sampling` | [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)   |
+| `fluence.models`   | [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers), [Debiasing](https://github.com/prajjwal1/fluence/wiki/Debiasing)
 
 ## Documentation 
-Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate fluence with your workflow. Since it's an early release, there might be bugs here and there. Please file an issue if you encounter one.
+Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate `fluence` with your workflow. Since it's an early release, there might be bugs. Please file an issue if you encounter one. Docs are a work-in-progress.
 
 ### Contribution
 You can contribute by either filing an issue or sending a Pull Request (if you encounter any bug or want some features to be added). Please checkout the [contributing guide](https://github.com/prajjwal1/fluence/blob/master/CONTRIBUTING.md) for more details.
@@ -65,7 +67,7 @@ You can contribute by either filing an issue or sending a Pull Request (if you e
 
 ### Tests
 
-Fluence comes with an [extensive test suite](https://github.com/prajjwal1/fluence/tree/master/tests). Each and every module has been tested before it comes into master branch.
+Fluence comes with an [extensive test suite](https://github.com/prajjwal1/fluence/tree/master/tests) for high test coverage.
 ```
 pytest tests/ -v
 ```
