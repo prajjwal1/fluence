@@ -1,13 +1,13 @@
 import logging
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import torch
 from torch import nn
-from torch.utils.data.dataloader import DataLoader
 from torch.cuda.amp import autocast
+from torch.utils.data.dataloader import DataLoader
 from tqdm import tqdm
 from transformers import EvalPrediction, Trainer
 from transformers.file_utils import is_apex_available, is_torch_tpu_available
@@ -63,9 +63,7 @@ class SiameseTrainer(Trainer):
         super().__init__(*args, **kwargs)
 
     def training_step(
-        self,
-        model: nn.Module,
-        inputs: Dict[str, Dict[str, Union[torch.Tensor, Any]]],
+        self, model: nn.Module, inputs: Dict[str, Dict[str, Union[torch.Tensor, Any]]],
     ) -> float:
         model.train()
         for k, v in inputs["a"].items():
@@ -85,7 +83,9 @@ class SiameseTrainer(Trainer):
 
         with autocast:
             outputs = model(**inputs)
-            loss = outputs[0]  # model outputs are always tuple in transformers (see doc)
+            loss = outputs[
+                0
+            ]  # model outputs are always tuple in transformers (see doc)
 
         if self.args.past_index >= 0:
             self._past = outputs[self.args.past_index]
@@ -102,9 +102,12 @@ class SiameseTrainer(Trainer):
 
         return loss.item()
 
-	def prediction_step(
-            self, model: nn.Module, inputs: Dict[str, Union[torch.Tensor, Any]], prediction_loss_only: bool
-    	) -> Tuple[Optional[float], Optional[torch.Tensor], Optional[torch.Tensor]]:
+    def prediction_step(
+        self,
+        model: nn.Module,
+        inputs: Dict[str, Union[torch.Tensor, Any]],
+        prediction_loss_only: bool,
+    ) -> Tuple[Optional[float], Optional[torch.Tensor], Optional[torch.Tensor]]:
         """
         Perform an evaluation step on :obj:`model` using obj:`inputs`.
         Subclass and override to inject custom behavior.
@@ -121,8 +124,10 @@ class SiameseTrainer(Trainer):
             Tuple[Optional[float], Optional[torch.Tensor], Optional[torch.Tensor]]:
             A tuple with the loss, logits and labels (each being optional).
         """
-        has_labels = any(inputs["a"].get(k) is not None for k in ["labels", "lm_labels", "masked_lm_labels"])
-
+        has_labels = any(
+            inputs["a"].get(k) is not None
+            for k in ["labels", "lm_labels", "masked_lm_labels"]
+        )
 
         for k, v in inputs["a"].items():
             if isinstance(v, torch.Tensor):
@@ -141,7 +146,9 @@ class SiameseTrainer(Trainer):
                 loss = None
                 logits = outputs[0]
             if self.args.past_index >= 0:
-                self._past = outputs[self.args.past_index if has_labels else self.args.past_index - 1]
+                self._past = outputs[
+                    self.args.past_index if has_labels else self.args.past_index - 1
+                ]
 
         if prediction_loss_only:
             return (loss, None, None)
