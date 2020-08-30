@@ -55,7 +55,6 @@ class Test_Siamese(unittest.TestCase):
         result = trainer.evaluate()
         self.assertTrue(result["eval_loss"] > 0.5)
 
-
     def test_siamese_add(self):
         model_args = SiameseModelArguments(
             model_name=self.MODEL_ID,

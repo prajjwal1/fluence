@@ -102,7 +102,7 @@ class SiameseTrainer(Trainer):
 
         return loss.item()
 
-    def _prediction_loop(
+    def prediction_loop(
         self,
         dataloader: DataLoader,
         description: str,
@@ -116,7 +116,7 @@ class SiameseTrainer(Trainer):
         prediction_loss_only = (
             prediction_loss_only
             if prediction_loss_only is not None
-            else self.prediction_loss_only
+            else self.args.prediction_loss_only
         )
 
         model = self.model
