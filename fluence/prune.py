@@ -30,7 +30,7 @@ class Pruner():
         print("Detected {} Linear layers".format(_lin_cnt))
         print("Detected {} Conv layers".format(_conv_cnt))
 
-    def perform_pruning(self, method, **kwargs):
+    def perform_pruning(self, method):
         chosen_method = self._method_type[method]
         prune.global_unstructured(
             self._parameters_to_prune,
