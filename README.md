@@ -57,6 +57,7 @@ The library contains implementation for the following approaches (many more to c
 | `fluence.optim`    | [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers)                     |
 | `fluence.sampling` | [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)   |
 | `fluence.models`   | [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers), [Debiasing](https://github.com/prajjwal1/fluence/wiki/Debiasing)
+| `fluence.prune` | [Pruning](https://github.com/prajjwal1/fluence/wiki/Pruning)|
 
 ## Documentation 
 Please head to this [link](https://github.com/prajjwal1/fluence/wiki) to learn how you can integrate `fluence` with your workflow. Since it's an early release, there might be bugs. Please file an issue if you encounter one. Docs are a work-in-progress.

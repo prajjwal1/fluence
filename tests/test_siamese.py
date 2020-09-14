@@ -29,7 +29,6 @@ class Test_Siamese(unittest.TestCase):
     def test_dataset(self):
         self.assertEqual(len(self.train_dataset[0]["a"].input_ids), 128)
         self.assertEqual(len(self.train_dataset[0]["b"].input_ids), 128)
-        print(self.train_dataset[1000]["a"])
         self.assertEqual(
             self.train_dataset[100]["a"].label, self.train_dataset[100]["b"].label,
         )
