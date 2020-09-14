@@ -62,6 +62,9 @@ class MetaTrainer(Trainer):
         self.optimizers = optimizers
         self.eval_results = {}
         set_seed(self.args.seed)
+        self.epoch = None
+        self.global_step = None
+        self.tb_writer = None
 
     def get_loss_mean(self, loss):
         return loss.mean() if self.args.n_gpu > 1 else loss
