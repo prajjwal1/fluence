@@ -54,48 +54,5 @@ class Test_Siamese(unittest.TestCase):
         result = trainer.evaluate()
         self.assertTrue(result["eval_loss"] > 0.5)
 
-    def test_siamese_add(self):
-        model_args = SiameseModelArguments(
-            model_name=self.MODEL_ID,
-            config_name=self.MODEL_ID,
-            tokenizer_name=self.MODEL_ID,
-        )
-        config = AutoConfig.from_pretrained(
-            self.MODEL_ID, num_labels=3, finetuning_task="mrpc"
-        )
-        model = SiameseTransformerAdd(model_args, config)
-        training_args = TrainingArguments(output_dir="./tests", do_eval=True)
-        trainer = SiameseTrainer(
-            model=model,
-            args=training_args,
-            train_dataset=self.train_dataset,
-            eval_dataset=self.eval_dataset,
-            data_collator=siamese_data_collator,
-        )
-        result = trainer.evaluate()
-        self.assertTrue(result["eval_loss"] > 0.5)
-
-    def test_siamese_add(self):
-        model_args = SiameseModelArguments(
-            model_name=self.MODEL_ID,
-            config_name=self.MODEL_ID,
-            tokenizer_name=self.MODEL_ID,
-        )
-        config = AutoConfig.from_pretrained(
-            self.MODEL_ID, num_labels=3, finetuning_task="mrpc"
-        )
-        model = SiameseTransformer(model_args, config)
-        training_args = TrainingArguments(output_dir="./tests", do_eval=True)
-        trainer = SiameseTrainer(
-            model=model,
-            args=training_args,
-            train_dataset=self.train_dataset,
-            eval_dataset=self.eval_dataset,
-            data_collator=siamese_data_collator,
-        )
-        result = trainer.evaluate()
-        self.assertTrue(result["eval_loss"] > 0.5)
-
-
 if __name__ == "__main__":
     unittest.main()
