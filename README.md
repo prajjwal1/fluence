@@ -33,7 +33,7 @@ Fluence is targeted towards two main goals:
 1. **Compute efficiency**: Low resource research:
 2. **Robustness**: Algorithms that either enhance our understanding of current methods or show where SoTA methods fail.
 
-It is as straightforward to use as [HF Transformers](https://github.com/huggingface/transformers), and fully integrates with [Pytorch](https://github.com/pytorch/pytorch).
+It is as straightforward to use as [HF Transformers](https://github.com/huggingface/transformers), and fully integrates with [Pytorch](https://github.com/pytorch/pytorch). Please note that the current modules (meta-trainer, siamese-trainer) which rely on inherited `Trainer` works with `transformers==3.0`. Newer version comes with a modified `Trainer`.
 
 ## Installing
 For stable version:
