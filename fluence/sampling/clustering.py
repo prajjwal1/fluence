@@ -8,8 +8,19 @@ import sklearn
 import torch
 from sklearn.cluster import MiniBatchKMeans
 from sklearn.metrics import pairwise_distances_argmin_min
+from itertools import cycle, islice
 
-
+def roundrobin(*iterables):
+    num_active = len(iterables)
+    nexts = cycle(iter(it).__next__ for it in iterables)
+    while num_active:
+        try:
+            for next in nexts:
+                yield next()
+        except StopIteration:
+            num_active -= 1
+            nexts = cycle(islice(nexts, num_active))
+            
 @dataclass
 class Clustering_Arguments:
     batch_size: int = field(metadata={"help": "Batch size to use for MiniBatchKMeans"})
@@ -64,11 +75,21 @@ class Clustering_Processor:
 
     def __init__(self, cluster):
         self.labels = cluster["labels_"]
-        self.kmeans_cluster_centers = cluster["cluster_centers_"]
+        self.cluster_centers = cluster["cluster_centers_"]
 
     def get_cluster_indices(self, cluster_num: int):
         return np.where(self.labels == cluster_num)[0]
 
+    def get_diverse_stream(self):
+        """
+        Returns diverse samples from cluster. On each iteration, it extracts a sample
+        from each cluster.
+        """
+        total_indices = []
+        for i in range(512):
+            total_indices.append(self.get_cluster_indices(i))
+        return list(roundrobin(*total_indices))
+    
     def get_cluster_indices_by_pct(self, data_pct: float, original_len: int) -> List:
         """
         Input:
@@ -105,4 +126,4 @@ class Clustering_Processor:
         return indices
 
     def get_cluster_indices_from_centroid(self, embeddings: torch.tensor) -> np.array:
-        return pairwise_distances_argmin_min(self.kmeans_cluster_centers, embeddings)[0]
+        return pairwise_distances_argmin_min(self.cluster_centers, embeddings)[0]
