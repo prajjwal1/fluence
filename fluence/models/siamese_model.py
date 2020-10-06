@@ -2,7 +2,7 @@ import logging
 
 import torch
 from torch import nn
-from transformers import AutoModel, AutoModelForSequenceClassification, PreTrainedModel
+from transformers import AutoModel
 from .pooling import MeanPooling
 
 logger = logging.getLogger(__name__)
