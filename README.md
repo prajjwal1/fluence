@@ -17,8 +17,7 @@ Fluence is a Pytorch based deep learning library focussed on providing computati
 - [Adaptive Attention Span in Transformers (ACL 2019)](https://arxiv.org/abs/1905.07799)
 - [Adaptively Sparse Transformers (EMNLP 2019)](https://arxiv.org/abs/1909.00015)
 - [Reducing Transformer Depth on Demand with Structured Dropout (ICLR 2020)](https://arxiv.org/abs/1909.11556)
-#### Meta Learning
-- [Model Agnostic Meta Learning (ICML 2017)](https://arxiv.org/abs/1703.03400)
+
 #### Debiasing
 - [Learning Robust Representations by Projecting Superficial Statistics Out (ICLR 2019)](https://openreview.net/pdf?id=rJEjjoR9K7)
 -------------------------------------------------------------------------------
@@ -53,7 +52,7 @@ The library contains implementation for the following approaches (many more to c
 |  Module            |  Method with documentation
 | -------------------------------------------------------------------------------------- | ----------------------------
 | `fluence.adaptive` | [Adaptive Methods](https://github.com/prajjwal1/fluence/wiki/Adaptive-Methods)         |
-| `fluence.meta`     | [Meta Learning](https://github.com/prajjwal1/fluence/wiki/Meta-Learning)               |      
+| `fluence.datasets` | [Datasets](https://github.com/prajjwal1/fluence/wiki/datasets)                         |      
 | `fluence.optim`    | [Optimizers](https://github.com/prajjwal1/fluence/wiki/Optimizers)                     |
 | `fluence.sampling` | [Importance Sampling](https://github.com/prajjwal1/fluence/wiki/Importance-sampling)   |
 | `fluence.models`   | [Siamese Methodology](https://github.com/prajjwal1/fluence/wiki/Siamese-Transformers), [Debiasing](https://github.com/prajjwal1/fluence/wiki/Debiasing)
