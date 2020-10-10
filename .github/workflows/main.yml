@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest black isort pytest-cov
-        pip install .[sklearn, torch]
+        pip install sklearn torch
         pip install git+https://github.com/huggingface/transformers
         python3 setup.py install --user
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
