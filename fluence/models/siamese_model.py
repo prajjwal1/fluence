@@ -3,7 +3,7 @@ import logging
 import torch
 from torch import nn
 from transformers import AutoModel
-from .pooling import MeanPooling
+from ..pooling import MeanPooling
 
 logger = logging.getLogger(__name__)
 
@@ -23,11 +23,12 @@ class SiameseTransformer(nn.Module):
 
     def forward(self, a, b):
         labels = a.pop('labels')
-        b.pop('labels')
+        if 'labels' in list(b.keys()):
+            b.pop('labels')
         output_a = self.model_a(**a)
         output_b = self.model_b(**b)
-        embeddings_a = mean_pooling(output_a,  a['attention_mask'])
-        embeddings_b = mean_pooling(output_b, b['attention_mask'])
+        embeddings_a = MeanPooling(output_a[0],  a['attention_mask'])
+        embeddings_b = MeanPooling(output_b[0], b['attention_mask'])
         output = torch.cat([embeddings_a, embeddings_b, embeddings_a-embeddings_b], dim=1)
         logits = self.classifier(output)
         loss = self.criterion(logits, labels)

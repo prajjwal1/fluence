@@ -23,7 +23,6 @@ setuptools.setup(
         "dataclasses;python_version<'3.7'",
         "tqdm >= 4.27",
         "transformers",
-        "higher",
     ],
     python_requires=">=3.6",
     classifiers=[
