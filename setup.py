@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Fluence",
-    version="0.1.7",
+    version="0.1.8",
     author="Prajjwal Bhargava",
     author_email="prajjwalin@pm.me",
     description=(
@@ -22,7 +22,6 @@ setuptools.setup(
         "numpy",
         "dataclasses;python_version<'3.7'",
         "tqdm >= 4.27",
-        "transformers",
     ],
     python_requires=">=3.6",
     classifiers=[
