@@ -12,7 +12,7 @@ from fluence.datasets import MetaDataset
 class Test_Meta(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.MODEL_ID)
+        self.tokenizer = AutoTokenizer.from_pretrained('albert-base-v2')
 
     def test_meta_dataset(self):
         data_args = DataTrainingArguments(
