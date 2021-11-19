@@ -6,7 +6,8 @@
 <a href="https://github.com/prajjwal1/fluence/releases"><img alt="Latest Release" src="https://img.shields.io/pypi/v/fluence"/></a>
 <a href="https://github.com/prajjwal1/fluence/blob/master/LICENSE"><img alt="Apache" src="https://img.shields.io/github/license/prajjwal1/fluence" /></a>
 <a href="https://codecov.io/gh/prajjwal1/fluence"><img src="https://codecov.io/gh/prajjwal1/fluence/branch/master/graph/badge.svg" /></a>
--------------------------------------------------------------------------------
+
+Winner of Pytorch Global Hackathon 2020.
 
 Fluence is a Pytorch based deep learning library focussed on providing computationally efficient, low resource methods and algorithms for NLP. Although the main focus is to provide support with transformers for NLP tasks, it can be extended with other domains and architectures as well. Currently in pre-alpha stage.
 
