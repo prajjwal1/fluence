@@ -2,7 +2,6 @@
 <img src="https://raw.githubusercontent.com/prajjwal1/fluence/master/docs/logo.png" width="500">
 <br />
 <br />
-<a href="https://github.com/prajjwal1/fluence/actions"><img alt="Build Status" src="https://github.com/prajjwal1/fluence/workflows/build/badge.svg" /></a>
 <a href="https://github.com/prajjwal1/fluence/releases"><img alt="Latest Release" src="https://img.shields.io/pypi/v/fluence"/></a>
 <a href="https://github.com/prajjwal1/fluence/blob/master/LICENSE"><img alt="Apache" src="https://img.shields.io/github/license/prajjwal1/fluence" /></a>
 <a href="https://codecov.io/gh/prajjwal1/fluence"><img src="https://codecov.io/gh/prajjwal1/fluence/branch/master/graph/badge.svg" /></a>
